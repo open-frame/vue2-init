@@ -1,0 +1,62 @@
+/* --------------- 自定义element UI的样式 --------------- */
+// 面包屑
+.el-breadcrumb {
+
+  position: sticky;
+  top: 60px;
+  background-color: #fffefc;
+  z-index: 1;
+  padding: 15px 0;
+
+  .el-breadcrumb__inner a,
+  .el-breadcrumb__inner.is-link {
+    font-weight: normal;
+    color: #606266;
+
+    &:hover {
+      color: chocolate !important;
+    }
+  }
+}
+
+// 表格
+.el-table {
+
+  th,
+  td {
+    padding: 5px 0;
+  }
+
+  .el-table__header-wrapper {
+    .has-gutter {
+      tr {
+        th {
+          background-color: #e5fbf7;
+        }
+      }
+    }
+  }
+}
+
+// 分页器
+.el-pagination {
+  text-align: right;
+  margin-top: 20px;
+}
+
+// 时间选择器、下拉菜单
+.el-date-editor.el-input,
+.el-date-editor.el-input__inner,
+.el-select {
+  width: 100%;
+}
+
+// 弹出层
+.el-dialog {
+  margin-top: 70px !important;
+
+  .el-dialog__body {
+    max-height: 65vh;
+    overflow-y: auto;
+  }
+}
