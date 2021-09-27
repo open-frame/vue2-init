@@ -1,7 +1,27 @@
 /* --------------- 自定义element UI的样式 --------------- */
+// 下拉菜单放在了按钮组里
+.functions {
+  .el-dropdown {
+    border-left: 1px solid #dcdfe6;
+  }
+}
+
+// 数字框
+.el-input-number {
+  width: 100%;
+
+  .el-input__inner {
+    text-align: left;
+  }
+}
+
+// 级联选择器
+.el-cascader {
+  width: 100%;
+}
+
 // 面包屑
 .el-breadcrumb {
-
   position: sticky;
   top: 60px;
   background-color: #fffefc;
@@ -14,17 +34,23 @@
     color: #606266;
 
     &:hover {
-      color: chocolate !important;
+      color: #19aa8d !important;
     }
   }
 }
 
 // 表格
 .el-table {
+  th {
+    padding: 4px 0;
+  }
 
-  th,
   td {
-    padding: 5px 0;
+    padding: 2px 0;
+  }
+
+  .el-button {
+    padding: 4px 8px;
   }
 
   .el-table__header-wrapper {
@@ -35,6 +61,11 @@
         }
       }
     }
+  }
+
+  .el-tag {
+    height: 22px;
+    line-height: 22px;
   }
 }
 
@@ -47,6 +78,7 @@
 // 时间选择器、下拉菜单
 .el-date-editor.el-input,
 .el-date-editor.el-input__inner,
+.el-date-editor--daterange.el-input__inner,
 .el-select {
   width: 100%;
 }
@@ -59,4 +91,13 @@
     max-height: 65vh;
     overflow-y: auto;
   }
+}
+
+p {
+  margin: 0;
+}
+
+.el-tooltip__popper {
+  font-size: 14px;
+  max-width: 400px;
 }

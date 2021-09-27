@@ -6,32 +6,26 @@ const path = require('path')
 
 module.exports = {
   dev: {
-
-    // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/api': {
-        target: 'http://localhost:8080/', // 接口基路径
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api': ''//接口转发。
-        }
-      }
+      // '/api': {
+      //   target: 'https://clw.edo-iot.com',
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     '^/api': ''// 本地转发到target地址，实现跨域处理
+      //   }
+      // }
     },
-
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
+    // host: '192.168.10.188', // 全易的ip
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
-
-    // Use Eslint Loader?
-    // If true, your code will be linted during bundling and
-    // linting errors and warnings will be shown in the console.
-    useEslint: true,
+    useEslint: false, // 语法校验
     // If true, eslint errors and warnings will also be shown in the error overlay
     // in the browser.
     showEslintErrorsInOverlay: false,
@@ -47,7 +41,6 @@ module.exports = {
     // set this to false - it *may* help
     // https://vue-loader.vuejs.org/en/options.html#cachebusting
     cacheBusting: true,
-
     cssSourceMap: true
   },
 

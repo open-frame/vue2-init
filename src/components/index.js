@@ -1,10 +1,18 @@
 // 全局组件
-import Test from './test'
+import TimeLine from "./time-line.vue"
+import Amap from "./aMap.vue"
+import TableColumnIncDec from "./table-column-IncDec.vue"
+import TableColumnDrag from "./table-column-drag";
+import CustomTable from "./custom-table.vue"
 
 
 
 const components = {
-  Test
+  TimeLine,
+  Amap,
+  TableColumnIncDec,
+  TableColumnDrag,
+  CustomTable
 }
 
 export default {

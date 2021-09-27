@@ -4,7 +4,7 @@ const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 
-function resolve (dir) {
+function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
 
@@ -30,6 +30,17 @@ module.exports = {
     publicPath: process.env.NODE_ENV === 'production'
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
+  },
+  externals: {
+    // key是全局变量名，value是引入库的名
+    'Vue': 'vue',
+    'VueRouter': 'vue-router',
+    'vueX': 'vuex',
+    'axios': 'axios',
+    'element-ui': 'ELEMENT',
+    'vue-amap': 'AMap',
+    'echarts': 'echarts',
+    'QC': 'QC'
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],

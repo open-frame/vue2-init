@@ -4,5 +4,5 @@ const prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  BASE_URL: '"http://203.93.121.134:38081"'
+  BASE_URL: '"https://clwdev.edo-iot.com"'
 })

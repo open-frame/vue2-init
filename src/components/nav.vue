@@ -1,52 +1,111 @@
 <template>
-  <el-card class="box-card nav">
+  <el-card class="box-card">
     <div class="copyright">
       <i
-        :class="
-          this.$store.state.isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold'
-        "
-        :title="this.$store.state.isCollapse ? '展开' : '折叠'"
+        :class="$store.state.isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold'"
+        :title="$store.state.isCollapse ? '展开菜单栏' : '折叠菜单栏'"
         @click="isCollapse"
       ></i>
-      <h3 style="margin-right: 30px; color: #19aa8d">
-        平台名称平台名称
-      </h3>
-      <h5 style="font-weight: normal; color: #909399">
-        {{ data.organization }}
-      </h5>
+      <h4 class="mb-0" style="color: #19aa8d">
+        <a
+          href="https://clw.edo-iot.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          style="color: #19aa8d; text-decoration: none"
+          >伊莎</a
+        >
+        · 车联网运营平台
+      </h4>
+      <h6 class="mb-0" style="font-weight: normal; color: #909399">
+        {{ $store.state.userInfo.deptName }}
+      </h6>
     </div>
     <div class="info">
       <el-dropdown @command="me">
         <span class="el-dropdown-link" style="cursor: pointer">
-          欢迎，{{ data.user }}
+          欢迎，{{ $store.state.userInfo.userName }}
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="center">个人中心</el-dropdown-item>
-          <el-dropdown-item command="info">我的资料</el-dropdown-item>
-          <el-dropdown-item command="exit" divided>退出登录</el-dropdown-item>
-          <!-- <el-dropdown-item disabled>双皮奶</el-dropdown-item> -->
+          <!-- <el-dropdown-item v-permission="'/my/center'" command="center"
+            >个人中心</el-dropdown-item
+          >
+          <el-dropdown-item v-permission="'/my/info'" command="info"
+            >我的资料</el-dropdown-item
+          > -->
+          <el-dropdown-item command="1">个人中心</el-dropdown-item>
+          <el-dropdown-item command="2">我的资料</el-dropdown-item>
+          <el-dropdown-item command="0" divided>退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
       <el-divider direction="vertical"></el-divider>
       <el-dropdown @command="setings">
         <span class="el-dropdown-link" style="cursor: pointer">
-          <i class="el-icon-s-operation" title="设置"></i>
+          <i class="el-icon-s-operation" title="平台设置"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="theme">功能1</el-dropdown-item>
-          <el-dropdown-item command="language">功能2</el-dropdown-item>
-          <el-dropdown-item
-            command="editor"
-            divided
-            v-if="$route.path === '/home'"
+          <el-dropdown-item command="0">清除缓存</el-dropdown-item>
+          <el-dropdown-item command="1" v-if="$route.path === '/home'"
             >调整布局</el-dropdown-item
           >
-          <el-dropdown-item command="append" v-if="$route.path === '/home'"
-            >添加模块</el-dropdown-item
+          <el-dropdown-item command="2" v-if="$route.path === '/home'"
+            >模块管理</el-dropdown-item
+          >
+          <el-dropdown-item
+            command="3"
+            v-if="!$store.state.showOpenedPages"
+            divided
+            >显示标签条</el-dropdown-item
           >
         </el-dropdown-menu>
       </el-dropdown>
+      <el-divider direction="vertical"></el-divider>
+      <i
+        :class="isFullScreen ? 'fa fa-compress' : 'el-icon-full-screen'"
+        :title="isFullScreen ? '退出全屏' : '进入全屏'"
+        @click="fullScreen"
+      ></i>
+      <el-divider direction="vertical"></el-divider>
+      <el-dropdown @command="helps">
+        <span class="el-dropdown-link" style="cursor: pointer">
+          <i
+            class="fa fa-question-circle-o"
+            aria-hidden="true"
+            title="帮助"
+          ></i>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="1">使用技巧</el-dropdown-item>
+          <a href="mailto:yinfengxia@edo-iot.com?subject=问题反馈">
+            <el-dropdown-item command="2"> 反馈问题 </el-dropdown-item>
+          </a>
+        </el-dropdown-menu>
+      </el-dropdown>
+      <el-divider direction="vertical"></el-divider>
+      <el-link
+        v-if="$store.state.nowNet === '4g'"
+        type="success"
+        title="当前网络状况"
+        >{{ $store.state.nowNet }}</el-link
+      >
+      <el-link
+        v-if="$store.state.nowNet === '3g'"
+        type="info"
+        title="当前网络状况"
+        >{{ $store.state.nowNet }}</el-link
+      >
+      <el-link
+        v-if="$store.state.nowNet === '2g'"
+        type="warning"
+        title="当前网络状况"
+        >{{ $store.state.nowNet }}</el-link
+      >
+      <el-link
+        v-if="$store.state.nowNet === '1g'"
+        type="danger"
+        title="当前网络状况"
+        >{{ $store.state.nowNet }}</el-link
+      >
     </div>
   </el-card>
 </template>
@@ -60,17 +119,6 @@
 
 export default {
   name: "Nav",
-  props: {
-    data: {
-      type: Object,
-      default() {
-        return {
-          organization: "啥啥啥啥啥啥啥啥啥啥啥公司",
-          user: "admin",
-        };
-      },
-    },
-  },
   data() {
     return {
       isFullScreen: false,
@@ -79,41 +127,97 @@ export default {
   methods: {
     // 展开/折叠菜单栏
     isCollapse() {
-      console.log(this.$store.state.isCollapse);
-      this.$store.mutations.menUnfold(!this.$store.state.isCollapse);
+      this.$store.commit("menUnfold", !this.$store.state.isCollapse);
     },
     // 我的 相关设置
     me(command) {
       switch (command) {
-        case "info":
-          console.log("进入我的资料！");
+        case "0":
+          this.$router.push("/logon");
+          this.$store.commit("logout");
           break;
-        case "center":
-          console.log("进入个人中心！");
+        case "1":
+          this.$router.push("/my/center");
           break;
-        case "exit":
-          sessionStorage.clear();
-          localStorage.clear();
-          this.$router.push({
-            path: "/login",
-          });
+        case "2":
+          this.$router.push("/my/info");
           break;
       }
     },
     // 平台设置
     setings(command) {
       switch (command) {
-        case "theme":
-          console.log("执行切换主题！");
+        case "0":
+          localStorage.clear();
+          location.href = "/logon";
           break;
-        case "language":
-          console.log("执行切换语言！");
+        case "1":
+          this.$store.commit("editLayout", true);
           break;
-        case "editor":
-          this.$store.mutations.editLayout(true);
+        case "2":
+          this.$store.commit("addLayout", true);
           break;
-        case "append":
-          this.$store.mutations.addLayout(true);
+        case "3":
+          this.$store.commit(
+            "changeOpenedPages",
+            !this.$store.state.showOpenedPages
+          );
+          break;
+      }
+    },
+    fullScreen() {
+      if (this.isFullScreen) {
+        this.isFullScreen = false;
+        //退出全屏
+        const el = document;
+        const cfs =
+          el.cancelFullScreen ||
+          el.webkitCancelFullScreen ||
+          el.mozCancelFullScreen ||
+          el.exitFullScreen;
+
+        //typeof cfs != "undefined" && cfs
+        if (cfs) {
+          cfs.call(el);
+        } else if (typeof window.ActiveXObject !== "undefined") {
+          //for IE，这里和fullScreen相同，模拟按下F11键退出全屏
+          const wscript = new ActiveXObject("WScript.Shell");
+          if (wscript != null) {
+            wscript.SendKeys("{F11}");
+          }
+        }
+      } else {
+        this.isFullScreen = true;
+        //全屏
+        const el = document.documentElement;
+        const rfs =
+          el.requestFullScreen ||
+          el.webkitRequestFullScreen ||
+          el.mozRequestFullScreen ||
+          el.msRequestFullScreen;
+
+        //typeof rfs != "undefined" && rfs
+        if (rfs) {
+          rfs.call(el);
+        } else if (typeof window.ActiveXObject !== "undefined") {
+          //for IE，这里其实就是模拟了按下键盘的F11，使浏览器全屏
+          const wscript = new ActiveXObject("WScript.Shell");
+          if (wscript != null) {
+            wscript.SendKeys("{F11}");
+          }
+        }
+      }
+    },
+    // 平台使用帮助
+    helps(command) {
+      switch (command) {
+        case "1":
+          // this.$router.push("/my/info");
+          break;
+        case "2":
+          this.$message.info("请留意启动的Email软件");
+          break;
+        case "3":
           break;
       }
     },
@@ -122,19 +226,21 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.nav {
+.box-card {
+  width: 100%;
   position: sticky;
   top: 0;
   z-index: 1;
 
   /deep/.el-card__body {
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px;
+    padding: 12px;
     .copyright {
-      h3,
-      h5 {
+      h4,
+      h6 {
         display: inline-block;
       }
     }

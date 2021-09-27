@@ -1,31 +1,42 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-import Vue from 'vue'
 import App from './App'
+import store from './store'
 import router from './router'
 import './router/guards'
-import ElementUI from 'element-ui';
 import '../static/theme/index.css'
-import directives from './directives/index'
+import "./assets/css/element.less";
+import "./assets/css/public.css"
+import "./assets/css/style.less";
 import components from './components'
-import commons from "./common/common.js";
+import directives from './directives/index'
 import filters from './filters/index.js'
-import * as store from '@/store'
+import commons from "./utils/common.js";
+import secret from "./utils/secret.js";
+import publicAPI from "./service/request/public.js";
+import systemAPI from "./service/request/system.js";
 import 'default-passive-events'
-import "animate.css"; // 引入动画
+import "animate.css";
+import "./utils/listener-net.js"
 
 
 
 
 
 
-Vue.use(ElementUI);
+
+Vue.use(components);
 Vue.use(filters);
 Vue.use(directives);
-Vue.use(components);
+
+
+
+
 Vue.config.productionTip = false
 Vue.prototype.$commons = commons;
-Vue.prototype.$store = store;
+Vue.prototype.$secret = secret;
+Vue.prototype.$publicAPI = publicAPI;
+Vue.prototype.$systemAPI = systemAPI;
 
 
 
@@ -35,6 +46,7 @@ Vue.prototype.$store = store;
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  store,
   router,
   components: { App },
   template: '<App/>'
