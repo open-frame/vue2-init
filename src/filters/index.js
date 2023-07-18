@@ -1,29 +1,13 @@
-// 全局过滤器
-const filters = {
-  // 文本转换
-  tranForm(data) {
-    switch (data) {
-      case "1":
-        return "哈哈";
-      case "2":
-        return "丫丫";
-      case "3":
-        return "拉拉";
-      case "4":
-        return "大大阿达";
-    }
-  },
+// 数字千位符
+export function toThousands(num) {
+  if (isNaN(num)) {
+    return num
+  }
 
-  // 
-
-}
-
-
-
-export default {
-  install(Vue) {
-    Object.keys(filters).forEach(key => {
-      Vue.filter(key, filters[key]);
-    })
+  const reg = /\B(?=(\d{3})+(?!\d))/g; // 逢3位,
+  if (Number.isInteger(num)) {
+    return num.toString().replace(reg, ','); // 整数
+  } else {
+    return num.toFixed(2).replace(reg, ','); // 小数
   }
 }

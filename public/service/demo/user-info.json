@@ -1,0 +1,19 @@
+{
+  "code": 0,
+  "data": {
+    "deptName": "亿度物联",
+    "loginName": "quanyi",
+    "deptType": "666",
+    "avatar": "",
+    "userName": "全易",
+    "userId": 142,
+    "roleKeys": [
+      "button_test"
+    ],
+    "deptCode": "001"
+  },
+  "msg": "操作成功",
+  "errorMsg": "",
+  "eternal": "",
+  "eternal2": ""
+}

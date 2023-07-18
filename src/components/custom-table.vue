@@ -1,10 +1,12 @@
 <template>
-  <div class="custom-table">
-    <div class="table-handle">
-      <el-button-group class="functions">
-        <slot name="function"></slot>
-        <el-dropdown v-if="showExport" trigger="click" @command="exporting">
-          <el-button size="small">
+  <div class="">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <el-button-group>
+          <slot name="left"></slot>
+        </el-button-group>
+        <el-dropdown v-if="$listeners.exporting" trigger="click" @command="exporting">
+          <el-button :size="size">
             导出<i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
@@ -12,52 +14,39 @@
             <el-dropdown-item command="2">导出全部</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-      </el-button-group>
-      <div class="table-config">
-        <slot name="config"></slot>
-        <el-popover trigger="manual" v-model="config.show" width="160">
-          <TableColumnIncDec
-            :dataId="dataId"
-            :now="config.nowColumn"
-            :all="config.allColumn"
-            @ok="okConfigTable"
-          />
-          <el-button
-            slot="reference"
-            size="small"
-            icon="el-icon-setting"
-            title="表格配置"
-            @click="config.show = !config.show"
-          ></el-button>
-        </el-popover>
+        <el-dropdown v-if="$listeners.printing" trigger="click" @command="printing">
+          <el-button :size="size">
+            打印<i class="el-icon-arrow-down el-icon--right"></i>
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="1">打印本页</el-dropdown-item>
+            <el-dropdown-item command="2">打印全部</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+      <div class="">
+        <slot name="right"></slot>
       </div>
     </div>
-    <TableColumnDrag
-      ref="table"
-      :loading="loading"
-      :headId="headId"
-      :data="data"
-      :tableKey="tableKey"
-      :header="config.nowColumn"
-      :showSelect="showSelect"
-      @selectData="selectData"
-      @cell-click="cellClick"
-    >
-      <template v-slot:table-body="{ data }">
-        <slot name="body" :data="data"></slot>
-      </template>
-      <template v-slot:table-handle>
-        <slot name="handle"></slot>
-      </template>
-    </TableColumnDrag>
-    <el-pagination
-      @size-change="dataSizeChange"
-      @current-change="handleCurrentChange"
-      :page-sizes="[15, 20, 30, 50]"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-    >
+    <el-table ref="table" :size="size" :data="data" :[olyHeight]="height || maxHeight || '400'" :border="border"
+      :row-key="rowKey" :empty-text="emptyText" v-loading="loading" :reserve-selection="reserveSelection"
+      :show-summary="showSummary" :summary-method="summaryMethod" tooltip-effect="dark" highlight-current-row
+      @row-click="rowClick" @select="select" @select-all="selectAll" @selection-change="selectionChange"
+      element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.8)">
+      <el-table-column v-if="showSelection" :reserve-selection="true" type="selection" width="55" fixed="left"
+        :selectable="selecteisDisabled">
+      </el-table-column>
+      <el-table-column v-if="showIndex" label="序号" width="50">
+        <template slot-scope="scope">
+          {{ pageSize * (pageNum - 1) + (scope.$index + 1) }}
+        </template>
+      </el-table-column>
+      <slot name="columns"></slot>
+    </el-table>
+    <el-pagination class="text-end mt-3" v-if="$listeners['current-change']" @size-change="dataSizeChange" @current-change="handleCurrentChange"
+      :page-sizes="[$tableDataSize, 20, 30, 50]" :page-size="pageSize" :disabled="loading" :current-page="currentPage"
+      layout="total, sizes, prev, pager, next, jumper" :total="total">
     </el-pagination>
   </div>
 </template>
@@ -65,88 +54,187 @@
 <script>
 /**
  * @author        全易
- * @time          2021-04-15 14:23:16  星期四
- * @description   复合表格
- */
+ * @time          2021-12-28 13:26:08  星期二
+ * @description   自定义的表格，使用方式同elementUI。属性、方法、事件参考elementUI文档
+ **/
 
 export default {
-  name: "CustomTable",
+  name: "edo-table",
   data() {
     return {};
   },
   props: {
-    headId: {
-      type: String,
-      default: "",
-    },
-    dataId: {
-      type: String,
-      default: "",
-    },
     loading: {
+      type: Boolean,
+      default: false,
+    },
+    size: {
+      type: String,
+      default: "small",
+    },
+    emptyText: {
+      type: String,
+    },
+    border: {
       type: Boolean,
       default: true,
     },
-    data: {
-      type: Array,
-      default: [],
-    },
-    tableKey: {
+    rowKey: {
       type: [String, Number],
       default: "",
+    },
+    height: {
+      type: [String, Number],
+      default: "",
+    },
+    maxHeight: {
+      type: [String, Number],
+      default: "",
+    },
+    data: {
+      type: Array,
+      default: () => {
+        return [];
+      },
     },
     total: {
       type: Number,
       default: 0,
     },
+    pageNum: {
+      type: Number,
+      default: 1,
+    },
     pageSize: {
       type: Number,
-      default: 15,
+      default() {
+        return this.$tableDataSize;
+      },
     },
-    config: {
-      type: Object,
-      default: {},
+    currentPage: {
+      type: Number,
+      default() {
+        return this.pageNum;
+      },
     },
-    showExport: {
-      type: Boolean,
-      default: true,
-    },
-    showSelect: {
+    // 显示序号列
+    showIndex: {
       type: Boolean,
       default: false,
     },
+    showSummary: {
+      type: Boolean,
+      default: false,
+    },
+    summaryMethod: {
+      type: Function,
+      default: () => {
+        return () => { };
+      },
+    },
+    reserveSelection: {
+      type: Boolean,
+      default: false,
+    },
+    // 返回值用来决定这一行的 CheckBox 是否可以勾选
+    selecteisDisabled: {
+      type: Function,
+      default: () => {
+        return () => { };
+      },
+    },
+  },
+  watch: {
+    data(now, old) {
+      const that = this;
+      this.$nextTick(() => {
+        that.$refs.table.doLayout(); // 为了解决行错位问题
+      });
+    },
+  },
+  computed: {
+    showSelection() {
+      return this.$listeners["select"] || this.$listeners["selection-change"];
+    },
+    olyHeight() {
+      // 因为elementUI不能 height 和 max-height 同时存在，所以采用动态属性
+      // console.log("height：", this.height, "maxHeight：", this.maxHeight);
+      if (this.height) {
+        return "height";
+      } else if (this.maxHeight) {
+        return "max-height";
+      } else {
+        return "max-height";
+      }
+    },
   },
   methods: {
+    // 页量
     dataSizeChange(val) {
       console.log(`每页 ${val} 条`);
-      this.$emit("dataSize", val);
+      this.$emit("size-change", val);
     },
+    // 翻页
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
-      this.$emit("handleCurrent", val);
+      this.$emit("current-change", val);
     },
     // 选择数据
-    selectData(val) {
-      // console.log(val);
-      this.$emit("selectData", val);
+    select(selection, row) {
+      // console.log(election, row);
+      this.$emit("select", selection, row);
     },
-    // 点击单元格
-    cellClick(row, column, cell, event) {
-      this.$emit("cell-click", row, column, cell, event);
+    // 选择数据
+    selectionChange(selection) {
+      // console.log(selection);
+      this.$emit("selection-change", selection);
     },
-    // 确定配置表格列
-    okConfigTable(data) {
-      // console.log(data);
-      this.config.nowColumn = data;
-      this.$refs.table.resetTable();
+    // 全选数据
+    selectAll(selection) {
+      console.log(selection);
+      this.$emit("select-all", selection);
     },
-    // 导出
+    // 清空选择
+    clearSelection() {
+      this.$refs.table.clearSelection();
+    },
+    // 全选
+    toggleAllSelection() {
+      this.$refs.table.toggleAllSelection();
+    },
+    // 选择数据
+    toggleRowSelection(row = [], selected = true) {
+      this.$refs.table.toggleRowSelection(row, selected);
+    },
+    // 单选数据
+    setCurrentRow(row) {
+      this.$refs.table.setCurrentRow(row);
+    },
+    // 点击行
+    rowClick(row, column, event) {
+      // console.log(row, column, event);
+      this.$emit("row-click", row);
+    },
+    // 导出表格
     exporting(command) {
       this.$emit("exporting", command);
+    },
+    // 打印表格数据
+    printing(command) {
+      this.$emit("printing", command);
+    },
+    // 重载表格
+    doLayout() {
+      this.$refs.table.doLayout();
     },
   },
 };
 </script>
 
 <style lang="less" scoped>
+::v-deep .el-table {
+  th.el-table__cell {
+    background-color: #f8f7f7;
+  }
+}
 </style>

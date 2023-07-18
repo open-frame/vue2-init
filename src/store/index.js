@@ -1,15 +1,18 @@
-// import Vue from 'vue'
-// import Vuex from 'vuex'
+import Vue from 'vue';
+import Vuex from 'vuex';
 import states from "./states"
 import mutations from "./mutations"
 import actions from "./actions"
 import VuexPersist from 'vuex-persist'
 
-Vue.use(Vuex)
 
+
+Vue.use(Vuex)
 const vuexLocal = new VuexPersist({
-  storage: localStorage  // 可选存储位置：sessionStorage/indexDB
+  key:"operation-storage",
 })
+
+
 
 export default new Vuex.Store({
   //初始的常量集

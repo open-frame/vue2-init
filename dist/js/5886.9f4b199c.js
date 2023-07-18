@@ -1,0 +1,1 @@
+"use strict";(self["webpackChunkedo_project"]=self["webpackChunkedo_project"]||[]).push([[5886],{5886:function(t,e,c){c.r(e),c.d(e,{microAppStart:function(){return p}});var o=c(3153);const r="https://clw.edo-iot.com/kid-project/";function p(){o.ZP.start({preFetchApps:[{name:"plateform-bigview",url:r}]})}}}]);

@@ -1,0 +1,35 @@
+{
+  "total": 4,
+  "rows": [
+    {
+      "id": 1,
+      "codeType": "",
+      "name": "开始",
+      "codeValue": "1",
+      "comment": ""
+    },
+    {
+      "id": 2,
+      "codeType": "",
+      "name": "供电中",
+      "codeValue": "2",
+      "comment": ""
+    },
+    {
+      "id": 3,
+      "codeType": "",
+      "name": "结束",
+      "codeValue": "3",
+      "comment": ""
+    },
+    {
+      "id": 4,
+      "codeType": "",
+      "name": "异常",
+      "codeValue": "4",
+      "comment": ""
+    }
+  ],
+  "code": 0,
+  "msg": ""
+}

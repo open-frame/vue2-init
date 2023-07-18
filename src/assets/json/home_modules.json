@@ -1,0 +1,50 @@
+[
+  {
+    "component": "new-users",
+    "permission": "modules_NewUsers",
+    "url": "/management/use-electric",
+    "h": 280,
+    "id": "1",
+    "name": "今日新增用户",
+    "w": 450,
+    "x": 0,
+    "y": 0,
+    "remark": 1123
+  },
+  {
+    "component": "users-withdraw",
+    "permission": "modules_Withdraw",
+    "url": "/settlement/user-account?panel=withdraw",
+    "h": 280,
+    "id": "2",
+    "name": "用户提现",
+    "w": 631,
+    "x": 472,
+    "y": 0,
+    "remark": 1222
+  },
+  {
+    "component": "orders-refund",
+    "permission": "modules_Refunds",
+    "url": "/settlement/user-account?panel=refund",
+    "h": 280,
+    "id": "3",
+    "name": "订单退款",
+    "w": 565,
+    "x": 1119,
+    "y": 0,
+    "remark": 144
+  },
+  {
+    "component": "nopay-orders",
+    "permission": "modules_Orders",
+    "url": "/orders/order-manage",
+    "h": 400,
+    "id": "4",
+    "name": "未付款订单",
+    "w": 1678,
+    "x": 0,
+    "y": 543,
+    "remark": 1654
+  }
+]

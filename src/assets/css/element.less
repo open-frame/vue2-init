@@ -1,81 +1,14 @@
-/* --------------- 自定义element UI的样式 --------------- */
-// 下拉菜单放在了按钮组里
-.functions {
-  .el-dropdown {
-    border-left: 1px solid #dcdfe6;
-  }
-}
-
+/* --------------- 自定义 elementUI 的样式 --------------- */
 // 数字框
 .el-input-number {
-  width: 100%;
-
   .el-input__inner {
     text-align: left;
   }
 }
 
-// 级联选择器
-.el-cascader {
-  width: 100%;
-}
-
-// 面包屑
-.el-breadcrumb {
-  position: sticky;
-  top: 60px;
-  background-color: #fffefc;
-  z-index: 1;
-  padding: 15px 0;
-
-  .el-breadcrumb__inner a,
-  .el-breadcrumb__inner.is-link {
-    font-weight: normal;
-    color: #606266;
-
-    &:hover {
-      color: #19aa8d !important;
-    }
-  }
-}
-
-// 表格
-.el-table {
-  th {
-    padding: 4px 0;
-  }
-
-  td {
-    padding: 2px 0;
-  }
-
-  .el-button {
-    padding: 4px 8px;
-  }
-
-  .el-table__header-wrapper {
-    .has-gutter {
-      tr {
-        th {
-          background-color: #e5fbf7;
-        }
-      }
-    }
-  }
-
-  .el-tag {
-    height: 22px;
-    line-height: 22px;
-  }
-}
-
-// 分页器
-.el-pagination {
-  text-align: right;
-  margin-top: 20px;
-}
-
-// 时间选择器、下拉菜单
+// 级联选择器、数字框、时间选择器、下拉菜单
+.el-cascader,
+.el-input-number,
 .el-date-editor.el-input,
 .el-date-editor.el-input__inner,
 .el-date-editor--daterange.el-input__inner,
@@ -85,16 +18,10 @@
 
 // 弹出层
 .el-dialog {
-  margin-top: 70px !important;
-
   .el-dialog__body {
     max-height: 65vh;
     overflow-y: auto;
   }
-}
-
-p {
-  margin: 0;
 }
 
 .el-tooltip__popper {

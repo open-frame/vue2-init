@@ -1,11 +1,13 @@
 <template>
-  <div class="no-page">
+  <div class="w-100 d-flex justify-content-center align-items-center" style="height: 100vh;">
     <div class="content">
-      <img class="pic" src="@/assets/images/no-page.svg" alt="无此页" />
-      <h3 class="h3">
-        <el-button type="text" @click="$router.back()">返回</el-button>
-        <el-divider direction="vertical"></el-divider>
-        <el-button type="text" @click="$router.push('/logon')">登陆</el-button>
+      <img class="w-100" src="@/assets/images/no-page.svg" alt="无此页" />
+      <h3 class="text-center mt-5">
+        <el-button type="text" @click="back">返回</el-button>
+        <template v-if="showLogin">
+          <el-divider direction="vertical"></el-divider>
+          <router-link replace to="/logon">登陆</router-link>
+        </template>
       </h3>
     </div>
   </div>
@@ -19,27 +21,36 @@
  */
 
 export default {
-  name: "Page-NoPage",
-  data() {
-    return {};
+  name: "page-404",
+  beforeRouteEnter(to, from, next) {
+    // console.log(to, from);
+    next(vm => {
+      vm.fromURL = from.fullPath;
+    });
   },
+  data() {
+    return {
+      fromURL: "",
+    }
+  },
+  computed: {
+    showLogin() {
+      const hasMenu = this.$store.state.permissionMenu.length === 0;
+      const userInfo = this.$store.state.userInfo;
+      const token = localStorage.getItem("token");
+      return !token || hasMenu || !userInfo.userName;
+    }
+  },
+  methods: {
+    back() {
+      this.$router.replace(this.fromURL)
+    }
+  }
 };
 </script>
 
 <style lang="less" scoped>
-.no-page {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .content {
-    width: 65%;
-    .pic {
-      width: 100%;
-    }
-    .h3 {
-      text-align: center;
-    }
-  }
+.content {
+  width: 65%;
 }
 </style>

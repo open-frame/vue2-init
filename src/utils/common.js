@@ -28,7 +28,7 @@ export default {
     let date = time.getDate() < 10 ? "0" + time.getDate() : time.getDate();
     return year + "-" + month + "-" + date;
   },
-  // 调用：let times = getNextDate(new Date(), -5);  
+  // 调用：let times = getNearDate(new Date(), -5);
   // 输出：前五天
 
 
@@ -41,6 +41,57 @@ export default {
       time.getMonth() + 1 < 10 ? "0" + (time.getMonth() + 1) : time.getMonth() + 1;
     return year + "-" + month;
   },
-  // 调用：let times = getNextDate(new Date(), -5);  
+  // 调用：let times = getNearMonth(new Date(), -5);
   // 输出：前五月
+
+
+  // 创建唯一标识
+  createID() {
+    // console.log(this.transformDate([new Date]));
+    const timestamp = Date.now() + "";
+    const time = new Date();
+    const year = time.getFullYear();
+    let mounth = time.getMonth();
+    let date = time.getDate();
+    let hour = time.getHours();
+    let minute = time.getMinutes();
+    let second = time.getSeconds();
+    const msecond = time.getMilliseconds() + "";
+
+    if (mounth < 10) {
+      mounth++;
+      mounth = "0" + mounth;
+    } else {
+      mounth + ""
+    }
+    if (date < 10) {
+      // date++;
+      date = "0" + date;
+    } else {
+      date + ""
+    }
+    if (hour < 10) {
+      hour + ""
+      hour = "0" + hour;
+    } else {
+      hour + ""
+    }
+    if (minute < 10) {
+      minute++
+      minute = "0" + minute;
+    } else {
+      minute + ""
+    }
+    if (second < 10) {
+      second + ""
+      second = "0" + second;
+    } else {
+      second + ""
+    }
+
+    return year + mounth + date + hour + minute + second + msecond + timestamp;
+  }
+
+
+  
 }

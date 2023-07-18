@@ -1,40 +1,19 @@
 <template>
-  <el-card class="box-card">
-    <div class="copyright">
-      <i
-        :class="$store.state.isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold'"
-        :title="$store.state.isCollapse ? '展开菜单栏' : '折叠菜单栏'"
-        @click="isCollapse"
-      ></i>
-      <h4 class="mb-0" style="color: #19aa8d">
-        <a
-          href="https://clw.edo-iot.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          style="color: #19aa8d; text-decoration: none"
-          >伊莎</a
-        >
-        · 车联网运营平台
-      </h4>
-      <h6 class="mb-0" style="font-weight: normal; color: #909399">
-        {{ $store.state.userInfo.deptName }}
-      </h6>
+  <el-header class="bg-white d-flex align-items-center justify-content-between mb-3 shadow-sm">
+    <div class="platform-name">
+      <i :class="$store.state.isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold'"
+        :title="$store.state.isCollapse ? '展开菜单栏' : '折叠菜单栏'" @click="isCollapse"></i>
+      <router-link class="text-decoration-none h4" to="/">{{ title }}</router-link>
     </div>
-    <div class="info">
+    <div class="d-flex justify-content-center align-items-center info">
       <el-dropdown @command="me">
         <span class="el-dropdown-link" style="cursor: pointer">
           欢迎，{{ $store.state.userInfo.userName }}
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <!-- <el-dropdown-item v-permission="'/my/center'" command="center"
-            >个人中心</el-dropdown-item
-          >
-          <el-dropdown-item v-permission="'/my/info'" command="info"
-            >我的资料</el-dropdown-item
-          > -->
-          <el-dropdown-item command="1">个人中心</el-dropdown-item>
-          <el-dropdown-item command="2">我的资料</el-dropdown-item>
+          <el-dropdown-item v-permission="'my/center'" command="1">个人中心</el-dropdown-item>
+          <el-dropdown-item v-permission="'my/info'" command="2">我的资料</el-dropdown-item>
           <el-dropdown-item command="0" divided>退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -44,70 +23,35 @@
           <i class="el-icon-s-operation" title="平台设置"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="0">清除缓存</el-dropdown-item>
-          <el-dropdown-item command="1" v-if="$route.path === '/home'"
-            >调整布局</el-dropdown-item
-          >
-          <el-dropdown-item command="2" v-if="$route.path === '/home'"
-            >模块管理</el-dropdown-item
-          >
-          <el-dropdown-item
-            command="3"
-            v-if="!$store.state.showOpenedPages"
-            divided
-            >显示标签条</el-dropdown-item
-          >
+          <el-dropdown-item command="3" v-if="!$store.state.showOpenedPages" divided>显示页签</el-dropdown-item>
+          <el-dropdown-item command="0" divided>清除缓存</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <el-divider direction="vertical"></el-divider>
-      <i
-        :class="isFullScreen ? 'fa fa-compress' : 'el-icon-full-screen'"
-        :title="isFullScreen ? '退出全屏' : '进入全屏'"
-        @click="fullScreen"
-      ></i>
       <el-divider direction="vertical"></el-divider>
       <el-dropdown @command="helps">
         <span class="el-dropdown-link" style="cursor: pointer">
-          <i
-            class="fa fa-question-circle-o"
-            aria-hidden="true"
-            title="帮助"
-          ></i>
+          <i class="fa fa-question-circle-o" aria-hidden="true" title="帮助"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="1">使用技巧</el-dropdown-item>
-          <a href="mailto:yinfengxia@edo-iot.com?subject=问题反馈">
+          <el-dropdown-item command="1">使用帮助</el-dropdown-item>
+          <a href="mailto:quanyi@edo-iot.com?subject=问题反馈">
             <el-dropdown-item command="2"> 反馈问题 </el-dropdown-item>
           </a>
+          <a target="_blank" href="https://work.weixin.qq.com/kfid/kfcd894c0a8bc6d7627">
+            <el-dropdown-item command="3"> 在线客服 </el-dropdown-item>
+          </a>
+          <el-dropdown-item v-permission="'test-page'" divided>
+            <router-link to="/test">测试页面</router-link>
+          </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
       <el-divider direction="vertical"></el-divider>
-      <el-link
-        v-if="$store.state.nowNet === '4g'"
-        type="success"
-        title="当前网络状况"
-        >{{ $store.state.nowNet }}</el-link
-      >
-      <el-link
-        v-if="$store.state.nowNet === '3g'"
-        type="info"
-        title="当前网络状况"
-        >{{ $store.state.nowNet }}</el-link
-      >
-      <el-link
-        v-if="$store.state.nowNet === '2g'"
-        type="warning"
-        title="当前网络状况"
-        >{{ $store.state.nowNet }}</el-link
-      >
-      <el-link
-        v-if="$store.state.nowNet === '1g'"
-        type="danger"
-        title="当前网络状况"
-        >{{ $store.state.nowNet }}</el-link
-      >
+      <i :class="isFullScreen ? 'fa fa-compress' : 'el-icon-full-screen'" :title="isFullScreen ? '退出全屏' : '进入全屏'"
+        @click="fullScreen"></i>
+      <el-divider direction="vertical"></el-divider>
+      <span title="当前网络状况">{{ $store.state.nowNet }}</span>
     </div>
-  </el-card>
+  </el-header>
 </template>
 
 <script>
@@ -116,13 +60,22 @@
  * @time          2020-10-05 16:38:30  星期一
  * @description   导航条
  */
+import { permission } from '@/directives/index.js'
 
 export default {
-  name: "Nav",
+  name: "",
+  directives: {
+    permission
+  },
   data() {
     return {
+      title: "",
+      menus: [],
       isFullScreen: false,
     };
+  },
+  created() {
+    this.title = process.env.VUE_APP_TITLE;
   },
   methods: {
     // 展开/折叠菜单栏
@@ -133,8 +86,7 @@ export default {
     me(command) {
       switch (command) {
         case "0":
-          this.$router.push("/logon");
-          this.$store.commit("logout");
+          this.$store.commit("logout", "0");
           break;
         case "1":
           this.$router.push("/my/center");
@@ -152,16 +104,10 @@ export default {
           location.href = "/logon";
           break;
         case "1":
-          this.$store.commit("editLayout", true);
-          break;
-        case "2":
-          this.$store.commit("addLayout", true);
+
           break;
         case "3":
-          this.$store.commit(
-            "changeOpenedPages",
-            !this.$store.state.showOpenedPages
-          );
+          this.$store.commit("changeOpenedPages", true);
           break;
       }
     },
@@ -226,31 +172,21 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.box-card {
-  width: 100%;
+.el-header {
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: 9;
 
-  /deep/.el-card__body {
-    width: 100%;
+  ::v-deep .el-card__body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px;
-    .copyright {
-      h4,
-      h6 {
-        display: inline-block;
-      }
-    }
-    .info {
-      display: flex;
-      align-items: center;
-      .time {
-        text-align: center;
-      }
-    }
+    padding: 10px;
   }
+}
+
+.depts {
+  max-height: 400px !important;
+  overflow-y: auto;
 }
 </style>

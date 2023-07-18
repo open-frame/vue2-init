@@ -1,69 +1,39 @@
-// 开放路由
+// 开放路由   需要在@/config/public-path.json 里配置路径
 const publicRouter = [
   {
     path: '/404',
+    name: 'page-404',
     component: () => import('@/pages/404'),
     meta: {
       title: '无此页',
-      id: "0"
+      id: "page-404" // 全局唯一
     }
   },
   {
     path: '/logon',
+    name: 'page-login',
     component: () => import("@/pages/login/index.vue"),
     meta: {
       title: '账号登录',
-      id: ""
+      id: "page-login"// 全局唯一
     }
   },
   {
     path: '/',
-    name: 'Main',
+    name: 'main-file',
     component: () => import("@/pages/main.vue"),
     redirect: "/home",
     children: [
       {
-        path: 'home',
-        name: 'Page-Home',
-        component: () => import('@/pages/home/index'),
+        path: '/overviews/plateform*',
+        component: () => import('@/pages/overviews/plateform'),
         meta: {
-          title: '看盘',
-          id: "Page-Home"
+          menuType: "0"
         }
       }
     ]
   }
 ];
 
-// 权限路由
-const privilegeRouter = [
-  {
-    path: '/',
-    name: 'Main',
-    component: () => import("@/pages/main.vue"),
-    redirect: "/home",
-    children: [
-      {
-        path: 'home',
-        name: 'Page-Home',
-        component: () => import('@/pages/home/index'),
-        meta: {
-          title: '首页',
-          id: "1369"
-        }
-      },
-      {
-        path: 'test',
-        name: 'Page-Test',
-        component: () => import('@/pages/test'),
-        meta: {
-          title: '测试页',
-          id: "87654331253476541323487654132221"
-        }
-      },
-    ]
-  }
-]
 
-
-export default [...publicRouter,...privilegeRouter]
+export default [...publicRouter]

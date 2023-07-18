@@ -1,33 +1,18 @@
 <template>
-  <div class="opened-page">
-    <el-tabs
-      v-model="$store.state.defaultPage"
-      type="card"
-      @tab-click="click"
-      @tab-remove="remove"
-    >
-      <template v-for="item in $store.state.openedPages">
-        <el-tab-pane
-          :closable="item.url !== '/home'"
-          :key="item.meta.id"
-          :label="item.title"
-          :name="item.meta.id"
-        >
-        </el-tab-pane>
-      </template>
+  <div v-if="$store.state.showOpenedPages" class="d-flex ms-3 me-3 opened-page">
+    <el-tabs v-model="$store.state.nowPage" type="card" @tab-click="click" @tab-remove="remove">
+      <el-tab-pane :closable="item.path !== '/home'" v-for="item in $store.state.openedPages" :key="item.meta.id"
+        :label="item.meta.title" :name="item.meta.id">
+      </el-tab-pane>
     </el-tabs>
     <el-dropdown class="close-btn" size="small" @command="handler">
       <el-button size="mini">
         关闭<i class="el-icon-arrow-down el-icon--right"></i>
       </el-button>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item command="1" v-if="$store.state.openedPages.length > 2"
-          >其他页面</el-dropdown-item
-        >
-        <el-dropdown-item command="2" v-if="$store.state.openedPages.length > 1"
-          >全部页面</el-dropdown-item
-        >
-        <el-dropdown-item command="0" divided>隐藏标签条</el-dropdown-item>
+        <el-dropdown-item command="1" v-if="$store.state.openedPages.length > 2">其他页面</el-dropdown-item>
+        <el-dropdown-item command="2" v-if="$store.state.openedPages.length > 1">全部页面</el-dropdown-item>
+        <el-dropdown-item command="0" divided>隐藏页签</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
@@ -41,59 +26,36 @@
  */
 
 export default {
-  name: "OpenedPage",
+  name: "",
   data() {
     return {};
   },
   methods: {
     click(tab) {
-      console.log(tab);
-      let url = this.$store.state.openedPages[Number(tab.index)].url;
-      if (this.$route.path !== url) {
-        this.$router.push(url);
+      // console.log(tab);
+      let fullPath = this.$store.state.openedPages[Number(tab.index)].fullPath;
+      if (this.$route.path !== fullPath) {
+        this.$router.push(fullPath);
         this.$store.commit("setDefaultPage", tab.name);
       }
     },
-    remove(tab) {
-      this.$store.commit("closeThisOpenedPages", tab);
-      const tablen = this.$store.state.openedPages.length - 1;
-      this.$store.commit(
-        "setDefaultPage",
-        this.$store.state.openedPages[tablen].meta.id
-      );
+    remove(id) {
+      // console.log(id);
+      this.$store.commit("closeThisOpenedPages", id);
     },
     // 操作页面记录条
     handler(command) {
       switch (command) {
         case "0":
-          this.changeOpenedPages();
+          this.$store.commit("changeOpenedPages", false);
           break;
         case "1":
-          this.closeOtherOpenedPages();
+          this.$store.commit("closePageTab", "1");
           break;
         case "2":
-          this.closeAllOpenedPages();
+          this.$store.commit("closePageTab", "0");
           break;
       }
-    },
-    // 关闭其他
-    closeOtherOpenedPages() {
-      this.$store.commit("closeOtherOpenedPages");
-    },
-    // 关闭全部
-    closeAllOpenedPages() {
-      this.$store.commit("closeAllOpenedPages");
-      if (this.$route.path !== "/home") {
-        this.$router.push("/home");
-        this.$store.commit("setDefaultPage", "Page-Home");
-      }
-    },
-    // 隐藏/显示页面记录条
-    changeOpenedPages() {
-      this.$store.commit(
-        "changeOpenedPages",
-        !this.$store.state.showOpenedPages
-      );
     },
   },
 };
@@ -101,37 +63,38 @@ export default {
 
 <style lang="less" scoped>
 .opened-page {
-  margin: 0 15px;
   position: relative;
-  display: flex;
-  /deep/.el-tabs {
-    width: -webkit-fill-available;
+  z-index: 1;
+
+  ::v-deep .el-tabs {
+    width: calc(100% - 73px);
+
     .el-tabs__header {
       margin: 0;
+
       .is-active {
         background-color: #ffffff;
       }
     }
+
     .el-tabs__nav-next,
     .el-tabs__nav-prev {
       line-height: 26px;
     }
+
     .el-tabs__item {
       padding: 2px 14px;
       height: auto;
       line-height: inherit;
+
       .el-icon-close {
         display: none;
       }
+
       &:hover .el-icon-close {
         display: inline-block;
       }
     }
   }
-  // .close-btn {
-  //   position: absolute;
-  //   top: 0;
-  //   right: 0;
-  // }
 }
 </style>

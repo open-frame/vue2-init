@@ -1,0 +1,1 @@
+"use strict";(self["webpackChunkedo_project"]=self["webpackChunkedo_project"]||[]).push([[6461],{6461:function(e,s,t){var o=t(7558);s["Z"]={myTask:(e,s)=>o.Z.get("/service/demo/myTask.json",e,s),taskEntrust:(e,s)=>o.Z.post("/service/demo/setTaskAssignee",e,s),myFinished:(e,s)=>o.Z.get("/service/demo/myFinished.json",e,s)}}}]);

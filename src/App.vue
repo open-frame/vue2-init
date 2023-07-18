@@ -5,19 +5,13 @@
 </template>
 
 <script>
+import { initAll } from "@/utils/cdn.js";
+initAll();
+
 export default {
   name: "App",
   created() {
-    const token = localStorage.getItem("token");
-    if (token) {
-      this.$store.dispatch("routers").then((res) => {
-        console.log(res);
-        if (res.code === 0) {
-          this.$store.commit("setRouters", res.data.menuList);
-          this.$store.commit("setMenu", res.data.menuList);
-        }
-      });
-    }
+    this.getRouters();
   },
   mounted() {
     // console.log(performance);
@@ -30,6 +24,49 @@ export default {
         break;
     }
   },
+  watch: {
+    "$store.state.userInfo"(now) {
+      // 有用户信息了，说明登陆了
+      if (Object.keys(now).length) {
+        this.microAppStart()
+      }
+    }
+  },
+  methods: {
+    // 获取权限路由
+    getRouters() {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        return;
+      }
+
+      this.$store.dispatch("routers").then((res) => {
+        if (res.code === 0) {
+          this.$store.commit("setRouters", res.data);
+          this.$store.commit("setMenu", res.data);
+          this.getUserInfo();
+        }
+      });
+    },
+    // 用户资料
+    getUserInfo() {
+      this.$store.dispatch("userInfo").then((res) => {
+        if (res.code === 0) {
+          this.$store.commit("setUserInfo", res.data);
+        }
+      });
+    },
+    // 子应用启动
+    async microAppStart() {
+      const hasMenu = this.$store.state.permissionMenu.length > 0;
+      const userInfo = this.$store.state.userInfo;
+      const token = localStorage.getItem("token");
+      if (token && hasMenu && userInfo.userName) {
+        const microApp = await import("@/utils/fetch-micro-app.js");
+        microApp.microAppStart(); // 子应用启动
+      }
+    }
+  },
 };
 </script>
 
@@ -39,4 +76,9 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+// 全局样式文件
+@import url("./assets/css/bootstrap.min.css");
+@import url("./assets/css/element.less");
+@import url("./assets/css/style.less");
 </style>

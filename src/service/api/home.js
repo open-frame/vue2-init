@@ -3,22 +3,22 @@
 import http from '../index'
 export default {
   // 首页布局
-  homeLayout: (params) => {
-    return http.post("/fsfsd/fsfsdfs", params)
+  homeLayout: (params, config) => {
+    return http.get("/service/demo/loadHomeConfig.json", params, config)
   },
 
   // 修改首页布局
-  editHomeLayout: (params) => {
-    return http.post("/tertrete/fsdfsfs", params)
+  saveHomeLayout: (params, config) => {
+    return http.post("/service/demo/saveHomeConfig", params, config)
   },
 
   // 首页模块
-  homeComponents: (params) => {
-    return http.post("/jhrhrt/werwerwe", params)
+  allComponents: (params, config) => {
+    return http.post("/service/demo/homeConfigBox", params, config)
   },
 
   // 今日新增用户
-  todyNewUsers: (params) => {
-    return http.post("/ddddds/kykuyytt/qwwadasd", params)
+  todyNewUsers: (params, config) => {
+    return http.get("/service/demo/newElecUser.json", params, config)
   },
 }

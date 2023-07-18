@@ -1,20 +1,16 @@
-import publicPath from "../router/path"
+const publicPath = require("@/config/public-path.json") // 开放路径
 
 export default {
   nowNet: "",  // 网络状态
   onLine: "",  // 在线情况
+  fullPage: false, // 全页面 ｜ 结构页面
   userInfo: {}, // 用户信息
-  menuId: "1369",// 菜单栏停留id
-  permissionMenu: [], // 权限菜单
-  permissionRouters: publicPath, //权限路由
-  keepAlivePages: ["Page-Home"],
-  isCollapse: true, // 菜单栏展开状态,展开是false
-  width: { "max-width": "12vw" }, // 布局
-  editLayout: false, // 首页模块调整
-  addLayout: false,   // 首页添加模块面板
-  hideNav: false, // 隐藏顶部条
-  hideMenu: false, // 隐藏菜单栏
-  showOpenedPages: true,  // 显示访问过的页面
-  openedPages: [], // 访问过的页面
-  defaultPage: "Page-Home"  // 当前停留页面
+  permissionMenu: [], // 菜单栏数据
+  permissionRouters: publicPath, // 所有路由
+  permissionButtons: [], // 页面按钮权限
+  permissionPublic: [], // 全局的权限，如nav条上的【个人中心】
+  isCollapse: true, // 展开菜单栏
+  showOpenedPages: true,  // 显示页签
+  openedPages: [], // 页面页签
+  nowPage: "",  // 当前停留页面
 }
