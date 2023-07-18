@@ -5,6 +5,7 @@ const CompressionWebpackPlugin = require('compression-webpack-plugin');
 
 
 module.exports = defineConfig({
+  publicPath: process.env.NODE_ENV === 'production' ? '/init-vue-project/' : '/',
   productionSourceMap: false,
   transpileDependencies: true,
   lintOnSave: false,
