@@ -1,0 +1,145 @@
+<!doctype html><html lang=""><head><title>亿度物联 · 开源操作平台</title><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=7"><meta http-equiv="X-UA-Compatible" content="ie=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="author" content="亿度物联"/><meta name="description" content="针对于现在生活环境中缺少公共电力的能源使用，在人们日常生活中在外用电的环境不便，且对于电动车充电的安全考虑，我们做出了这款公共用电的产品，在使用上直接寄托于小程序平台，方便简洁。在技术层面我们使用了阿里云物联平台，终端设备6s进行数据上报，使用hadoop大数据平台进行实时数据处理监测，针对用电压力推出三档收费，对用户页面进行快速简洁式的优化"><meta name="keywords" content="扫码充电管理平台,扫码充电运营平台,伊莎,伊莎能源,亿度物联,亿度,充电,电动车充电,用电运营平台,用电商户合作,充电桩接入合作,扫码用电,共享充电,新能源汽车充电"><meta name="copyright" content="本页版权亿度物联所有。All Rights Reserved"/><link rel="icon" type="image/x-ico" href="/assets/images/logo.icon"><script defer="defer" src="/init-vue-project/js/runtime~app.728d01db.js"></script><script defer="defer" src="/init-vue-project/js/npm.core-js.daca832e.js"></script><script defer="defer" src="/init-vue-project/js/npm.babel-runtime.f10867db.js"></script><script defer="defer" src="/init-vue-project/js/npm.element-ui.0acbfaea.js"></script><script defer="defer" src="/init-vue-project/js/npm.axios.547e56f1.js"></script><script defer="defer" src="/init-vue-project/js/npm.async-validator.adc3bb08.js"></script><script defer="defer" src="/init-vue-project/js/npm.normalize-wheel.24ede998.js"></script><script defer="defer" src="/init-vue-project/js/npm.assert.9efe5cce.js"></script><script defer="defer" src="/init-vue-project/js/npm.util.8af98ec5.js"></script><script defer="defer" src="/init-vue-project/js/npm.throttle-debounce.fed0240b.js"></script><script defer="defer" src="/init-vue-project/js/npm.object-keys.0732c76d.js"></script><script defer="defer" src="/init-vue-project/js/npm.vuex-persist.b46719de.js"></script><script defer="defer" src="/init-vue-project/js/npm.has-symbols.7a610fd6.js"></script><script defer="defer" src="/init-vue-project/js/npm.vue.4ccd86b9.js"></script><script defer="defer" src="/init-vue-project/js/npm.flatted.8f9cfd5e.js"></script><script defer="defer" src="/init-vue-project/js/npm.vuex.77cd613c.js"></script><script defer="defer" src="/init-vue-project/js/npm.vue-router.94ac4175.js"></script><script defer="defer" src="/init-vue-project/js/npm.resize-observer-polyfill.41e846e8.js"></script><script defer="defer" src="/init-vue-project/js/npm.process.b4941a9a.js"></script><script defer="defer" src="/init-vue-project/js/npm.node-polyfill-webpack-plugin.e208bea7.js"></script><script defer="defer" src="/init-vue-project/js/npm.is-callable.da973258.js"></script><script defer="defer" src="/init-vue-project/js/npm.ieee754.41d1171d.js"></script><script defer="defer" src="/init-vue-project/js/npm.get-intrinsic.e4bb52cc.js"></script><script defer="defer" src="/init-vue-project/js/npm.deepmerge.3905c787.js"></script><script defer="defer" src="/init-vue-project/js/npm.base64-js.b8e34019.js"></script><script defer="defer" src="/init-vue-project/js/chunk-vendors.1514cb49.js"></script><script defer="defer" src="/init-vue-project/js/app.48c43250.js"></script><link href="/init-vue-project/css/132.88d54e74.css" rel="stylesheet"><link href="/init-vue-project/css/app.dd133ac8.css" rel="stylesheet"></head><body><div id="app"><div class="loading"><div style="text-align: center;"><div class="loading-icon"><div></div><div></div><div></div><div></div></div><div class="loading-text">Loading</div></div></div><style>.loading {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .loading-icon {
+        width: 150px;
+        height: 100px;
+      }
+
+      .loading-icon,
+      .loading-icon>div {
+        position: relative;
+        box-sizing: border-box;
+      }
+
+      .loading-icon {
+        display: block;
+        font-size: 0;
+        color: #000;
+      }
+
+      .loading-icon.la-dark {
+        color: #333;
+      }
+
+      .loading-icon>div {
+        display: inline-block;
+        float: none;
+        background-color: currentColor;
+        border: 0 solid currentColor;
+      }
+
+
+
+      .loading-icon>div:nth-child(1) {
+        position: absolute;
+        bottom: 32%;
+        left: 18%;
+        width: 14px;
+        height: 14px;
+        border-radius: 100%;
+        transform-origin: center bottom;
+        animation: ball-climbing-dot-jump 0.6s ease-in-out infinite;
+      }
+
+      .loading-icon>div:not(:nth-child(1)) {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 14px;
+        height: 2px;
+        border-radius: 0;
+        transform: translate(60%, 0);
+        animation: ball-climbing-dot-steps 1.8s linear infinite;
+      }
+
+      .loading-icon>div:not(:nth-child(1)):nth-child(2) {
+        animation-delay: 0ms;
+      }
+
+      .loading-icon>div:not(:nth-child(1)):nth-child(3) {
+        animation-delay: -600ms;
+      }
+
+      .loading-icon>div:not(:nth-child(1)):nth-child(4) {
+        animation-delay: -1200ms;
+      }
+
+      @keyframes ball-climbing-dot-jump {
+        0% {
+          transform: scale(1, 0.7);
+        }
+
+        20% {
+          transform: scale(0.7, 1.2);
+        }
+
+        40% {
+          transform: scale(1, 1);
+        }
+
+        50% {
+          bottom: 125%;
+        }
+
+        46% {
+          transform: scale(1, 1);
+        }
+
+        80% {
+          transform: scale(0.7, 1.2);
+        }
+
+        90% {
+          transform: scale(0.7, 1.2);
+        }
+
+        100% {
+          transform: scale(1, 0.7);
+        }
+      }
+
+      @keyframes ball-climbing-dot-steps {
+        0% {
+          top: 0;
+          right: 0;
+          opacity: 0;
+        }
+
+        50% {
+          opacity: 1;
+        }
+
+        100% {
+          top: 100%;
+          right: 100%;
+          opacity: 0;
+        }
+      }
+
+
+
+      .loading-text {
+        margin-top: 35px;
+        font-size: 22px;
+        letter-spacing: 7px;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #666;
+        animation: loading-animation 1s ease-in infinite alternate;
+      }
+
+      @keyframes loading-animation {
+        0% {
+          filter: blur(0px);
+          transform: skew(0deg);
+        }
+
+        100% {
+          filter: blur(3px);
+          transform: skew(-4deg);
+        }
+      }</style></div></body></html>
