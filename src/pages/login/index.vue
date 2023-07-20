@@ -96,7 +96,9 @@ export default {
               this.$essage.error(res.errorMsg);
               this.loginLoading = false;
             }
-          })
+          }).catch(() => {
+            this.loginLoading = false;
+          });
         }
       });
     },

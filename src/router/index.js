@@ -8,5 +8,6 @@ Vue.use(VueRouter)
 
 export default new VueRouter({
   // mode: "history",
+  base:"init-vue-project/",
   routes
 });
