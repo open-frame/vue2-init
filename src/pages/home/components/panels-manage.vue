@@ -25,9 +25,13 @@
 **/
 import allComponent from "@/assets/json/home_modules.json";
 import api from "@/service/api/home";
+import { permission } from '@/directives/index.js'
 
 export default {
   name: '',
+   directives: {
+    permission
+  },
   data() {
     return {
       allComponent, // 首页全部组件

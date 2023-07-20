@@ -1,8 +1,8 @@
 <template>
-  <router-view v-if="$store.state.fullPage" />
-  <edo-container v-else>
+  <router-view v-if="$store.state.layout==='0'" />
+  <component v-else :is="'edo-container-'+$store.state.layout">
     <router-view class="animate__animated animate__slideInLeft animate__faster border-top-0 m-3 mt-0 pages" />
-  </edo-container>
+  </component>
 </template>
 
 <script>
@@ -12,11 +12,12 @@
  * @description   页面布局整合 入口文件
  */
 
-import edoContainer from "@/components/container.vue";
-
-
 export default {
-  components: { edoContainer },
+  components: {
+    "edo-container-1": () => import("@/components/container/1.vue"),
+    "edo-container-2": () => import("@/components/container/2.vue"),
+    "edo-container-3": () => import("@/components/container/3.vue"),
+  },
   name: "main-file"
 };
 </script>
@@ -24,6 +25,6 @@ export default {
 <style lang="less" scoped>
 .pages {
   overflow-y: auto;
-  height: calc(100vh - 120px);/* 全屏高度减去顶部条和页签的高度 */ 
+  height: calc(100vh - 120px); /* 全屏高度减去顶部条和页签的高度 */
 }
 </style>

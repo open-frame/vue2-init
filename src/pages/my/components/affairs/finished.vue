@@ -43,7 +43,7 @@
         </el-table-column>
         <el-table-column show-overflow-tooltip prop="description" label="审核意见">
         </el-table-column>
-        <el-table-column show-overflow-tooltip label="操作" width="90">
+        <el-table-column show-overflow-tooltip label="操作" width="100">
           <template slot-scope="scope">
             <el-button plain type="primary" @click="openDetail(scope.row)">详情</el-button>
           </template>

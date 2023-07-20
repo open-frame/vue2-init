@@ -136,7 +136,6 @@ import { permission } from '@/directives/index.js'
 import { CodeTransforText } from 'code-transfor-text_vue'
 import resetFilter from "@/mixins/reset-filter.js"
 import pageReset from "@/mixins/page-reset.js"
-import pagination from "@/mixins/pagination.js"
 
 export default {
   name: "system-resource-index",

@@ -38,5 +38,5 @@ $router.afterEach((to, from) => {
   })
   store.commit("setDefaultPage", to.meta.id);
   store.commit("setPermissionButtons", to.meta.permissions);
-  store.commit("changeFullPage", to.meta.menuType === "0");
+  store.commit("changeLayout", to.meta.menuType === "0" ? "0" : store.state.layout);
 })

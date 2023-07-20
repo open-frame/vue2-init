@@ -30,6 +30,15 @@ export default {
       if (Object.keys(now).length) {
         this.microAppStart()
       }
+    },
+    "$store.state.openedPages": {
+      deep: true, // 深度监听 属性的变化
+      handler(now) {
+        // console.log(now) //页签长度发生变化说明缓存也要发生变化
+        this.includeKeepAlivePages = now.map(item => {
+          return item.name
+        })
+      }
     }
   },
   methods: {

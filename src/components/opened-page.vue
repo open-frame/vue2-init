@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     click(tab) {
-      // console.log(tab);
+      console.log(tab);
       let fullPath = this.$store.state.openedPages[Number(tab.index)].fullPath;
       if (this.$route.path !== fullPath) {
         this.$router.push(fullPath);

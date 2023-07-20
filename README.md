@@ -1,6 +1,6 @@
 
 
-# 车联网运营平台
+# 开源操作平台
 
 ## Project setup
 
@@ -42,7 +42,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 - 业务文件的代码量基本不得超过500行，**禁止超过600行**！！！内容过多请组件化、模块化
 
-- 样式尽量使用https://v5.bootcss.com/docs/utilities/background/的类名，减少编写css
+- 样式尽量使用https://v5.bootcss.com/docs/utilities/background/ 的类名，减少编写css
 
 - 插件体积超过10k的使用cdn引入，如同index.html。
 

@@ -30,7 +30,7 @@
         </el-table-column>
         <el-table-column show-overflow-tooltip prop="taskCreateTime" label="任务开始时间">
         </el-table-column>
-        <el-table-column label="操作" width="90">
+        <el-table-column label="操作" width="100">
           <template slot-scope="scope">
             <el-button plain type="primary" @click="check(scope.row)">审核</el-button>
           </template>

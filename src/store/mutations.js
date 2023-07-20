@@ -18,9 +18,9 @@ export default {
     state.userInfo = data;
   },
 
-  // 改变页面全覆盖还是左右结构型的页面
-  changeFullPage(state, status) {
-    state.fullPage = status;
+  // 页面布局
+  changeLayout(state, code) {
+    state.layout = code;
   },
 
   // 设置菜单栏显示数据
@@ -151,23 +151,17 @@ export default {
 
   // 插入经常访问的路由
   setOpenedPages(state, data) {
-    // console.log(state.openedPages, data);
-    // 排除没有id的页面
-    if (!data.meta.id) {
-      return;
-    }
-    // 排除不需要插入页签的路由
-    if (noAppendTabs.includes(data.name)) {
+    // console.log(state.openedPages, data, noAppendTabs.includes(data.path));
+    // 排除没有url的页面、不需要插入页签的路由
+    if (!data.path || noAppendTabs.includes(data.path)) {
       return;
     }
     // 排除已有页签
-    const includ = state.openedPages.some(item => {
-      return item.meta.id === data.meta.id;
-    });
-    if (includ) {
+    if (state.openedPages.some(item => {
+      return item.path === data.path;
+    })) {
       return;
     }
-
 
     state.openedPages.push(data)
   },

@@ -3,7 +3,7 @@ const publicPath = require("@/config/public-path.json") // 开放路径
 export default {
   nowNet: "",  // 网络状态
   onLine: "",  // 在线情况
-  fullPage: false, // 全页面 ｜ 结构页面
+  layout:"1", // 页面结构
   userInfo: {}, // 用户信息
   permissionMenu: [], // 菜单栏数据
   permissionRouters: publicPath, // 所有路由
