@@ -5,7 +5,6 @@ const noTokenAPI = require("@/config/no-tokenAPI.json") // 不需要验证token�
 
 
 // axios.defaults.baseURL = process.env.NODE_ENV === "development" ? "/api" : process.env.VUE_APP_BASE_URL;
-axios.defaults.baseURL = "/init-vue-project/";
 axios.defaults.headers = {
   'Content-Type': 'application/json; charset=utf-8'
 }
