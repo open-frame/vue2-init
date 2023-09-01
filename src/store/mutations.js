@@ -1,6 +1,5 @@
 import $router from "../router/index"
-const publicPath = require("@/config/public-path.json") // 开放路径
-const noAppendTabs = require("@/config/exclude-keep-alive-pages.json") // 不插入到标签条的页面
+const noAppendTabs = require("@/config/no-append-tabs.json") // 不插入到标签条的页面
 
 export default {
   // 设置当前网络状态
@@ -28,7 +27,7 @@ export default {
     // console.log("路由数据：", data);
     // 过滤不该显示在菜单栏的数据
     let filterRoute = data.filter(item => {
-      return !["F", "1"].includes(item.menuType) // 排除掉摁钮和全局菜单
+      return !["5", "1"].includes(item.menuType) // 排除掉摁钮和全局菜单
     })
     // console.log("过滤后的路由：", filterRoute);
 
@@ -63,7 +62,6 @@ export default {
     // console.log("路由数据：", retainURL);
 
     // 存储路由
-    state.permissionRouters = publicPath;
     state.permissionRouters.push(...retainURL.map(item => {
       return item.url;
     }));
@@ -86,7 +84,7 @@ export default {
           title: item.menuName,
           id: item.menuIdStr,
           permissions: item.children.map(it => {
-            if (it.menuType === "F") {
+            if (it.menuType === "5") {
               return {
                 ...it,
                 title: it.menuName,
@@ -137,11 +135,12 @@ export default {
   logout(state, type = "0") {
     sessionStorage.clear();
     localStorage.clear();
-    // 如果是手动退出
-    if (type === "0") {
-      state.openedPages = [state.openedPages[0]];
-    }
-    location.href = `/logon?previous=${type === "0" ? "" : location.pathname + location.search}`
+    $router.replace({
+      path: "/logon",
+      query: {
+        previous: `${type === "0" ? "" : location.pathname + location.search}`
+      }
+    });
   },
 
   // 显示/隐藏 页面访问记录

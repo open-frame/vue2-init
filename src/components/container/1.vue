@@ -1,10 +1,10 @@
 <template>
   <el-main class="p-0 bg-light d-flex">
-    <nav-menu  mode="vertical" :class="['border-0 edo-menu', $store.state.isCollapse?'':'no-collapse']" :collapse="$store.state.isCollapse" :default-active="$store.state.nowPage" :data="$store.state.permissionMenu" background-color="#2f3332" text-color="#fff" />
+    <nav-menu mode="vertical" :class="['border-0 edo-menu', $store.state.isCollapse?'':'no-collapse']" :collapse="$store.state.isCollapse" :default-active="$store.state.nowPage" :data="$store.state.permissionMenu" :background-color="themeColor['edo-bg-color']" :text-color="themeColor['edo-text-color']" />
     <el-container class="w-100 d-block view">
       <edo-nav class="mb-3" />
       <pages-tab />
-      <keep-alive :exclude="excludeKeepAlivePages" :include="includeKeepAlivePages">
+      <keep-alive :exclude="exclude" :include="include">
         <slot></slot>
       </keep-alive>
     </el-container>
@@ -17,10 +17,10 @@
  * @time          2023-02-01 14:51:10  星期三
  * @description   页面结构
  **/
+import themeColor from "./theme.json"
 import { NavMenu } from 'element-navmenu_vue'
 import edoNav from "@/components/nav/index.vue";
 import PagesTab from "@/components/opened-page";
-import excludeKeepAlivePages from "@/config/exclude-keep-alive-pages.json";
 
 
 export default {
@@ -28,10 +28,19 @@ export default {
   components: { NavMenu,edoNav, PagesTab },
   data() {
     return {
-      excludeKeepAlivePages,
-      includeKeepAlivePages:[]
+      themeColor
     };
   },
+   props: {
+    exclude: {
+      type: Array,
+      required: true
+    },
+    include: {
+      type: Array,
+      required: true
+    }
+  }
 };
 </script>
 
@@ -48,6 +57,6 @@ export default {
   overflow: auto;
 }
 .edo-menu.no-collapse{
-min-width: 200px;
+  min-width: 200px;
 }
 </style>

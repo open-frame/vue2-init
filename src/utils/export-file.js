@@ -1,8 +1,7 @@
 import { utils } from 'xlsx'
 import XLSXD from 'xlsx-style'
 
-export default {
-  excel(json = [], name = "下载的文件") {
+export function exportExcel(json = [], name = "下载的文件") {
     // 增加序号列
     json = json.map((item, index) => {
       return {
@@ -37,7 +36,15 @@ export default {
       }))])
     downExcel(file, name + ".xlsx");
   }
-}
+
+export function exportWord(){
+
+  }
+  
+export function exportPDF() {
+
+  }
+
 
 
 // 设置表格样式

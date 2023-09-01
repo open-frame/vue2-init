@@ -27,7 +27,7 @@
 * @description   停复运执行
 **/
 // import api from "@/service/api/process";
-import $publicAPI from "@/service/public.js";
+import { dropdownsAPI } from "@/service/public.js";
 import { CodeTransforText } from 'code-transfor-text_vue'
 
 export default {
@@ -70,7 +70,7 @@ export default {
   methods: {
     getDropdowns() {
       // 申请类别
-      $publicAPI.dropdowns("3001").then((res) => {
+      dropdownsAPI("3001").then((res) => {
         if (res.code === 0) {
           this.dropdowns.restoreType = res.data;
         }

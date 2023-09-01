@@ -3,7 +3,7 @@
     <nav-menu />
     <el-container class="w-100 d-block view">
       <pages-tab class="mt-2" />
-      <keep-alive :exclude="excludeKeepAlivePages" :include="includeKeepAlivePages">
+      <keep-alive :exclude="exclude" :include="include">
         <slot></slot>
       </keep-alive>
     </el-container>
@@ -16,20 +16,23 @@
  * @time          2023-02-01 14:51:10  星期三
  * @description   页面结构
  **/
-import NavMenu from "@/components/nav-menu.vue";
+import NavMenu from "@/components/nav/index.vue";
 import PagesTab from "@/components/opened-page";
-import excludeKeepAlivePages from "@/config/exclude-keep-alive-pages.json";
 
 
 export default {
   name: "container-1",
   components: { NavMenu, PagesTab },
-  data() {
-    return {
-      excludeKeepAlivePages,
-      includeKeepAlivePages: []
-    };
-  },
+   props: {
+    exclude: {
+      type: Array,
+      required: true
+    },
+    include: {
+      type: Array,
+      required: true
+    }
+  }
 };
 </script>
 

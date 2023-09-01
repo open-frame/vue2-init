@@ -11,7 +11,7 @@
       </el-col>
       <el-col :span="16" class="text-end">
         <el-button @click="getData" type="primary">搜索</el-button>
-        <el-button @click="reset">重置</el-button>
+        <el-button @click="queryReset">重置</el-button>
       </el-col>
     </el-row>
     <el-divider />
@@ -46,24 +46,26 @@
 <script>
 /**
  * @author        全易
- * @time          2020-10-05 16:36:26  星期一
+ * @time          2023-10-05 16:36:26  星期一
  * @description   数据字典
  */
 import api from "@/service/api/system";
-import dictionariesList from "./components/list.vue";
-import exportFile from "@/utils/export-file";
+import { exportExcel } from "@/utils/export-file";
 import { permission } from '@/directives/index.js'
-import resetFilter from "@/mixins/reset-filter.js"
-import pageReset from "@/mixins/page-reset.js"
-import pagination from "@/mixins/pagination.js"
+import { queryReset, pageReset, pagination } from "@/mixins/index.js"
+
+
+
 
 export default {
   name: "system-dictionaries-index",
-  mixins: [resetFilter, pageReset, pagination],
+  mixins: [queryReset, pageReset, pagination],
   directives: {
     permission
   },
-  components: { dictionariesList },
+  components: {
+    dictionariesList: () => import("./components/list.vue")
+  },
   data() {
     return {
       loading: false,
@@ -106,7 +108,7 @@ export default {
         title = "修改字典";
         inputValue = data.comment;
       }
-      const that = this;
+
       this.$prompt(`请输入字典名称：`, title, {
         inputValue,
         beforeClose(action, instance, done) {
@@ -137,7 +139,7 @@ export default {
             }
           });
         })
-        .catch((_) => { });
+        .catch(() => { });
     },
     // 删除字典
     deleteing(data) {
@@ -160,7 +162,7 @@ export default {
               }
             });
         })
-        .catch((err) => { });
+        .catch(() => { });
     },
     // 打开配置字典面板
     openEditDictionDrawer(data) {
@@ -201,7 +203,7 @@ export default {
               字典名称: item.comment,
             };
           });
-          exportFile.excel(data, "字典表");
+          exportExcel(data, "字典表");
         }
       }).finally(() => {
         downLoading.close();

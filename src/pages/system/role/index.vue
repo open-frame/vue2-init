@@ -17,7 +17,7 @@
       </el-col>
       <el-col :span="12" class="text-end">
         <el-button @click="getData" type="primary">搜索</el-button>
-        <el-button @click="reset">重置</el-button>
+        <el-button @click="queryReset">重置</el-button>
       </el-col>
     </el-row>
     <el-divider />
@@ -94,21 +94,19 @@
 <script>
 /**
  * @author        全易
- * @time          2020-10-05 16:36:26  星期一
+ * @time          2023-10-05 16:36:26  星期一
  * @description   角色管理
  */
 import api from "@/service/api/management";
-import $publicAPI from "@/service/public.js";
-import exportFile from "@/utils/export-file";
+import { dropdownsAPI } from "@/service/public.js";
+import { exportExcel } from "@/utils/export-file";
 import { permission, copy } from '@/directives/index.js'
 import { CodeTransforText } from 'code-transfor-text_vue'
-import resetFilter from "@/mixins/reset-filter.js"
-import pageReset from "@/mixins/page-reset.js"
-import pagination from "@/mixins/pagination.js"
+import { queryReset, pageReset, pagination } from "@/mixins/index.js"
 
 export default {
   name: "system-role-index",
-  mixins: [resetFilter, pageReset, pagination],
+  mixins: [queryReset, pageReset, pagination],
   directives: {
     permission, copy
   },
@@ -180,7 +178,7 @@ export default {
   methods: {
     getDropdowns() {
       // 用户状态
-      $publicAPI.dropdowns("626988").then((res) => {
+      dropdownsAPI("626988").then((res) => {
         if (res.code === 0) {
           this.dropdowns.status = res.data;
         }
@@ -353,7 +351,7 @@ export default {
               角色状态: `${this.$options.filters.CodeTransforText(item.status, this.dropdowns.status)}`,
             };
           });
-          exportFile.excel(data, "运营用户列表");
+          exportExcel(data, "运营用户列表");
         }
       }).finally(() => {
         downLoading.close();

@@ -16,7 +16,7 @@
 
 
 export default {
-  name: 'building-page',
+  name: 'page-building',
   data() {
     return {
 

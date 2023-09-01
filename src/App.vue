@@ -5,9 +5,6 @@
 </template>
 
 <script>
-import { initAll } from "@/utils/cdn.js";
-initAll();
-
 export default {
   name: "App",
   created() {
@@ -31,15 +28,6 @@ export default {
         this.microAppStart()
       }
     },
-    "$store.state.openedPages": {
-      deep: true, // 深度监听 属性的变化
-      handler(now) {
-        // console.log(now) //页签长度发生变化说明缓存也要发生变化
-        this.includeKeepAlivePages = now.map(item => {
-          return item.name
-        })
-      }
-    }
   },
   methods: {
     // 获取权限路由
@@ -80,14 +68,18 @@ export default {
 </script>
 
 <style lang="less">
+
+
+// 全局样式文件
+@import url("./assets/css/element.less");
+@import url("./assets/css/style.less");
+
+
+
+
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-// 全局样式文件
-@import url("./assets/css/bootstrap.min.css");
-@import url("./assets/css/element.less");
-@import url("./assets/css/style.less");
 </style>

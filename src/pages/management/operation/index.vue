@@ -17,7 +17,7 @@
       </el-col>
       <el-col :span="12" class="text-end">
         <el-button size="medium" type="primary" @click="getData">搜索</el-button>
-        <el-button size="medium" @click="reset">重置</el-button>
+        <el-button size="medium" @click="queryReset">重置</el-button>
       </el-col>
     </el-row>
     <el-divider />
@@ -122,21 +122,19 @@
 <script>
 /**
  * @author        全易
- * @time          2020-10-05 16:34:56  星期一
+ * @time          2023-10-05 16:34:56  星期一
  * @description   运营用户管理
  */
 import api from "@/service/api/management";
-import exportFile from "@/utils/export-file";
-import $publicAPI from "@/service/public.js";
+import { exportExcel } from "@/utils/export-file";
+import { dropdownsAPI, allRolesAPI } from "@/service/public.js";
 import { permission } from '@/directives/index.js'
 import { CodeTransforText } from 'code-transfor-text_vue'
-import resetFilter from "@/mixins/reset-filter.js"
-import pageReset from "@/mixins/page-reset.js"
-import pagination from "@/mixins/pagination.js"
+import { queryReset, pageReset, pagination } from "@/mixins/index.js"
 
 export default {
   name: "management-operation-index",
-  mixins: [resetFilter, pageReset, pagination],
+  mixins: [queryReset, pageReset, pagination],
   directives: {
     permission
   },
@@ -219,14 +217,14 @@ export default {
   methods: {
     getDropdowns() {
       // 平台客户账号状态
-      $publicAPI.dropdowns("477924").then((res) => {
+      dropdownsAPI("477924").then((res) => {
         if (res.code === 0) {
           this.dropdowns.status = res.data;
         }
       });
 
       // 性别
-      $publicAPI.dropdowns("035927").then((res) => {
+      dropdownsAPI("035927").then((res) => {
         if (res.code === 0) {
           this.dropdowns.sex = res.data;
         }
@@ -309,7 +307,7 @@ export default {
         });
       }
       // 获取角色列表
-      $publicAPI.allRoles().then((res) => {
+      allRolesAPI().then((res) => {
         if (res.code === 0) {
           this.dropdowns.roles = res.data.roles;
         }
@@ -460,7 +458,7 @@ export default {
               创建时间: item.createTime,
             };
           });
-          exportFile.excel(data, "运营用户列表");
+          exportExcel(data, "运营用户列表");
         }
       }).finally(() => {
         downLoading.close();

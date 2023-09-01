@@ -14,7 +14,7 @@
       </el-col>
       <el-col :span="16" class="text-end">
         <el-button @click="getData" type="primary">搜索</el-button>
-        <el-button @click="reset">重置</el-button>
+        <el-button @click="queryReset">重置</el-button>
       </el-col>
     </el-row>
     <el-divider />
@@ -81,7 +81,7 @@
               :value="item.code_value"></el-option>
           </el-select>
         </el-form-item>
-        <template v-if="submitMenuForm.menuType != 'M'">
+        <template v-if="submitMenuForm.menuType != '3'">
           <el-form-item label="文件地址" prop="remark">
             <el-select filterable clearable allow-create default-first-option v-model="submitMenuForm.remark"
               placeholder="">
@@ -126,20 +126,19 @@
 <script>
 /**
  * @author        全易
- * @time          2020-10-05 16:36:03  星期一
+ * @time          2023-10-05 16:36:03  星期一
  * @description   资源管理
  */
 import api from "@/service/api/management";
-import $publicAPI from "@/service/public.js";
+import { dropdownsAPI } from "@/service/public.js";
 import icons from "@/assets/json/icons.json";
 import { permission } from '@/directives/index.js'
 import { CodeTransforText } from 'code-transfor-text_vue'
-import resetFilter from "@/mixins/reset-filter.js"
-import pageReset from "@/mixins/page-reset.js"
+import { queryReset, pageReset } from "@/mixins/index.js"
 
 export default {
   name: "system-resource-index",
-  mixins: [resetFilter, pageReset],
+  mixins: [queryReset, pageReset],
   directives: {
     permission
   },
@@ -165,32 +164,7 @@ export default {
       },
       editMenuTreeData: [],
       dropdowns: {
-        menuType: [
-          {
-            "code_value": "0",
-            "code_name": "全屏"
-          },
-          {
-            "code_value": "C",
-            "code_name": "菜单"
-          },
-          {
-            "code_value": "F",
-            "code_name": "按钮"
-          },
-          {
-            "code_value": "M",
-            "code_name": "目录"
-          },
-          {
-            "code_value": "1",
-            "code_name": "全局"
-          },
-          {
-            "code_value": "2",
-            "code_name": "外链"
-          }
-        ],
+        menuType: menuTypeDemo,
         visible: [],
         remark: []
       },
@@ -216,10 +190,10 @@ export default {
     // 监听资源类型选择
     "submitMenuForm.menuType"(now) {
       console.log(now);
-      this.rules.orderNum[0].required = !["F", "1"].includes(now);
-      this.rules.icon[0].required = ["M", "C"].includes(now);
+      this.rules.orderNum[0].required = !["5", "1"].includes(now);
+      this.rules.icon[0].required = ["3", "4"].includes(now);
 
-      if (now === "M") {
+      if (now === "3") {
         this.submitMenuForm.url = "";
         this.submitMenuForm.remark = "";
       }
@@ -233,13 +207,13 @@ export default {
   methods: {
     getDropdowns() {
       // 资源类型
-      $publicAPI.dropdowns("746035").then((res) => {
+      dropdownsAPI("746035").then((res) => {
         if (res.code === 0) {
           this.dropdowns.menuType = res.data;
         }
       });
       // 资源状态
-      $publicAPI.dropdowns("063656").then((res) => {
+      dropdownsAPI("063656").then((res) => {
         if (res.code === 0) {
           this.dropdowns.visible = res.data;
         }
@@ -425,6 +399,33 @@ const rules = {
     { required: true, message: "请选择资源文件的地址", trigger: "change" },
   ],
 }
+
+const menuTypeDemo = [
+  {
+    "code_value": "0",
+    "code_name": "全屏" // 表示没有菜单栏和顶部条，将业务页面整个显示在浏览器里
+  },
+ {
+    "code_value": "1",
+    "code_name": "全局" // 表示不在菜单栏显示，但会在项目整个任意地方可以点进去，比如个人中心、我的资料
+  },
+  {
+    "code_value": "2",
+    "code_name": "外链"
+  },
+ {
+    "code_value": "3",
+    "code_name": "目录"
+  },
+  {
+    "code_value": "4",
+    "code_name": "菜单"
+  },
+  {
+    "code_value": "5",
+    "code_name": "按钮" // 表示页面需要显示的摁钮、模块之类的控制
+  }
+]
 </script>
 
 <style lang="less" scoped></style>

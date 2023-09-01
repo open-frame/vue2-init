@@ -12,6 +12,10 @@
   <meta name="keywords" content="vue,vue全家桶,开源vue架构,初始化vue架构,vue底层配置,vue项目">
   <meta name="copyright" content="版权亿度物联所有。All Rights Reserved" />
   <link rel="icon" type="image/x-ico" href="/img/logo.icon">
+  <% for (let path of htmlWebpackPlugin.options.CDNs.css) { %>
+    <link href="<%= path %>" rel="preload" as="style" />
+    <link href="<%= path %>" rel="stylesheet" />
+  <% } %>
 </head>
 
 <body>
@@ -182,7 +186,9 @@
 
 
 
-
+  <% for (let path of htmlWebpackPlugin.options.CDNs.js) { %>
+    <script defer src="<%= path %>"></script>
+  <% } %>
 </body>
 
 </html>

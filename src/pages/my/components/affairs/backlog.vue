@@ -6,7 +6,7 @@
       </el-col> -->
       <el-col class="text-end" :span="24">
         <el-button size="medium" @click="getData" type="primary">搜索</el-button>
-        <el-button size="medium" @click="reset">重置</el-button>
+        <el-button size="medium" @click="queryReset">重置</el-button>
       </el-col>
     </el-row>
     <el-divider />
@@ -50,16 +50,12 @@
 **/
 import Vue from 'vue'
 import api from "@/service/api/my";
-import exportFile from "@/utils/export-file";
-
-import resetFilter from "@/mixins/reset-filter.js"
-import pageReset from "@/mixins/page-reset.js"
-import pagination from "@/mixins/pagination.js"
+import { exportExcel } from "@/utils/export-file";
+import { queryReset, pageReset, pagination } from "@/mixins/index.js"
 
 export default {
   name: '',
-  mixins: [pageReset, resetFilter, pagination],
-
+  mixins: [pageReset, queryReset, pagination],
   data() {
     return {
       loading: false,
@@ -144,7 +140,7 @@ export default {
                 任务id: item.taskId,
               };
             });
-            exportFile.excel(data, "我的待办");
+            exportExcel(data, "我的待办");
           }
         })
         .finally(() => {

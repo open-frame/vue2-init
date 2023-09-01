@@ -4,14 +4,29 @@ const NodePolyfillWebpackPlugin = require("node-polyfill-webpack-plugin")
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 
 
+
+const CDNs = {
+  css: [
+    "https://unpkg.com/animate.css@4.1.1/animate.min.css",
+    "https://unpkg.com/bootstrap@5.3.1/dist/css/bootstrap.min.css",
+    "https://unpkg.com/bootstrap-icons@1.10.0/font/bootstrap-icons.css",
+    "https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css",
+    "https://unpkg.com/print-js@1.6.0/dist/print.css"
+  ],
+  js: [
+    "https://unpkg.com/compressorjs@1.2.1",
+    "https://unpkg.com/cropperjs@1.5.12",
+    "https://unpkg.com/print-js@1.6.0"
+  ]
+}
+
 module.exports = defineConfig({
-  publicPath: '/init-vue-project/',
   productionSourceMap: false,
   transpileDependencies: true,
   lintOnSave: false,
   devServer: {
-    open: true,
-    host: getIpAddress(),
+    // open: true,
+    // host: "",
     port: "2023",
     proxy: {
       '/api': {
@@ -71,6 +86,10 @@ module.exports = defineConfig({
     }
   },
   chainWebpack: config => {
+    config.plugin('html').tap(args => {
+      args[0].CDNs = CDNs;
+      return args
+    });
     if (process.env.NODE_ENV !== 'development') {
       // https://www.jianshu.com/p/865813b7cbb6
       // config.plugins.delete('prefetch')
@@ -87,24 +106,3 @@ module.exports = defineConfig({
     }
   }
 })
-
-
-
-
-
-
-// 获取当前机器的ip地址
-function getIpAddress() {
-  const os = require('os');
-  const ifaces = os.networkInterfaces()
-
-  for (let dev in ifaces) {
-    let iface = ifaces[dev]
-    for (let i = 0; i < iface.length; i++) {
-      let { family, address, internal } = iface[i]
-      if (family === 'IPv4' && address !== '127.0.0.1' && !internal) {
-        return address
-      }
-    }
-  }
-}

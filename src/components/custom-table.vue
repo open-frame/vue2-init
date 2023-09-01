@@ -28,13 +28,12 @@
         <slot name="right"></slot>
       </div>
     </div>
-    <el-table ref="table" :size="size" :data="data" :[olyHeight]="height || maxHeight || '400'" :border="border"
-      :row-key="rowKey" :empty-text="emptyText" v-loading="loading" :reserve-selection="reserveSelection"
-      :show-summary="showSummary" :summary-method="summaryMethod" tooltip-effect="dark" highlight-current-row
-      @row-click="rowClick" @select="select" @select-all="selectAll" @selection-change="selectionChange"
-      element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading"
-      element-loading-background="rgba(0, 0, 0, 0.8)">
-      <el-table-column v-if="showSelection" :reserve-selection="true" type="selection" width="55" fixed="left"
+    <el-table ref="tableDOM" :size="size" :data="data" :[olyHeight]="height || maxHeight || '400'" :border="border"
+      :row-key="rowKey" :empty-text="emptyText" v-loading="loading" :show-summary="showSummary"
+      :summary-method="summaryMethod" tooltip-effect="dark" highlight-current-row @row-click="rowClick" @select="select"
+      @select-all="selectAll" @selection-change="selectionChange" element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
+      <el-table-column v-if="showSelection" :reserve-selection="reserveSelection" type="selection" width="55" fixed="left"
         :selectable="selecteisDisabled">
       </el-table-column>
       <el-table-column v-if="showIndex" label="序号" width="50">
@@ -44,9 +43,9 @@
       </el-table-column>
       <slot name="columns"></slot>
     </el-table>
-    <el-pagination class="text-end mt-3" v-if="$listeners['current-change']" @size-change="dataSizeChange" @current-change="handleCurrentChange"
-      :page-sizes="[$tableDataSize, 20, 30, 50]" :page-size="pageSize" :disabled="loading" :current-page="currentPage"
-      layout="total, sizes, prev, pager, next, jumper" :total="total">
+    <el-pagination class="text-end mt-3" v-if="$listeners['current-change']" @size-change="dataSizeChange"
+      @current-change="handleCurrentChange" :page-sizes="[$tableDataSize, 20, 30, 50]" :page-size="pageSize"
+      :disabled="loading" :current-page="currentPage" layout="total, sizes, prev, pager, next, jumper" :total="total">
     </el-pagination>
   </div>
 </template>
@@ -127,10 +126,7 @@ export default {
       default: false,
     },
     summaryMethod: {
-      type: Function,
-      default: () => {
-        return () => { };
-      },
+      type: Function
     },
     reserveSelection: {
       type: Boolean,
@@ -138,17 +134,14 @@ export default {
     },
     // 返回值用来决定这一行的 CheckBox 是否可以勾选
     selecteisDisabled: {
-      type: Function,
-      default: () => {
-        return () => { };
-      },
+      type: Function
     },
   },
   watch: {
     data(now, old) {
       const that = this;
       this.$nextTick(() => {
-        that.$refs.table.doLayout(); // 为了解决行错位问题
+        that.$refs.tableDOM.doLayout(); // 为了解决行错位问题
       });
     },
   },
@@ -196,19 +189,19 @@ export default {
     },
     // 清空选择
     clearSelection() {
-      this.$refs.table.clearSelection();
+      this.$refs.tableDOM.clearSelection();
     },
     // 全选
     toggleAllSelection() {
-      this.$refs.table.toggleAllSelection();
+      this.$refs.tableDOM.toggleAllSelection();
     },
     // 选择数据
     toggleRowSelection(row = [], selected = true) {
-      this.$refs.table.toggleRowSelection(row, selected);
+      this.$refs.tableDOM.toggleRowSelection(row, selected);
     },
     // 单选数据
     setCurrentRow(row) {
-      this.$refs.table.setCurrentRow(row);
+      this.$refs.tableDOM.setCurrentRow(row);
     },
     // 点击行
     rowClick(row, column, event) {
@@ -225,7 +218,7 @@ export default {
     },
     // 重载表格
     doLayout() {
-      this.$refs.table.doLayout();
+      this.$refs.tableDOM.doLayout();
     },
   },
 };

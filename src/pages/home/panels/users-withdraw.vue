@@ -21,7 +21,7 @@
  * @description   用户提现
  */
 // import api from "@/service/api/settlement";
-import $publicAPI from "@/service/public.js";
+import { dropdownsAPI } from "@/service/public.js";
 import { CodeTransforText } from 'code-transfor-text_vue'
 
 export default {
@@ -44,7 +44,7 @@ export default {
   methods: {
     getDrapdowns() {
       // 审核状态
-      $publicAPI.dropdowns("3039").then((res) => {
+      dropdownsAPI("3039").then((res) => {
         if (res.code === 0) {
           this.dropdowns.approveStatus = res.data;
         }

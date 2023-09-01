@@ -1,6 +1,7 @@
 import axios from "axios"
 import { Message } from "element-ui"
 import $store from '@/store'
+const httpCodes = require("@/config/http-code.json") // https://blog.csdn.net/qq_42618566/article/details/132541251
 const noTokenAPI = require("@/config/no-tokenAPI.json") // 不需要验证token的接口
 
 
@@ -45,47 +46,11 @@ axios.interceptors.response.use(
   },
   (error) => {
     // https://www.runoob.com/tags/html-httpmessages.html
-    switch (error.response.status) {
-      case 302:
-        Message.error('302：重定向');
-        break;
-      case 400:
-        Message.error('400：请求错误');
-        break;
-      case 401:
-        Message.error('401：登陆过期');
-        break;
-      case 403:
-        Message.error('403：拒绝访问');
-        break;
-      case 404:
-        Message.error('404：无此接口');
-        break;
-      case 408:
-        Message.error('408：请求超时');
-        break;
-      case 500:
-        Message.error('500：服务器错误');
-        break;
-      case 501:
-        Message.error('501：服务未实现');
-        break;
-      case 502:
-        Message.error('502：网关错误');
-        break;
-      case 503:
-        Message.error('503：服务不可用');
-        break;
-      case 504:
-        Message.error('504：网关超时');
-        break;
-      case 505:
-        Message.error('505：HTTP版本不受支持');
-        break;
-      default:
-        Message.error('服务失败');
-        break;
-    }
+    // https://www.runoob.com/http/http-status-codes.html
+    const item = httpCodes.find(item => {
+      return error.response.status === item.code;
+    })
+    Message.error(`${item.code}：${item.message}`);
     return Promise.reject(error)
   }
 );

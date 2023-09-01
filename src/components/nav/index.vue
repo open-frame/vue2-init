@@ -1,19 +1,19 @@
 <template>
   <div>
     <el-header class="bg-white d-flex align-items-center justify-content-between shadow-sm">
-      <div class="platform-name">
-        <i :class="$store.state.isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold'"
+      <div class="text-truncate platform-name">
+        <i v-if="$store.state.layout!=='3'" :class="$store.state.isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold'"
           :title="$store.state.isCollapse ? '展开菜单栏' : '折叠菜单栏'" @click="isCollapse"></i>
         <router-link class="text-decoration-none h4" to="/">{{ title }}</router-link>
       </div>
+      <nav-menu v-if="$store.state.layout === '3'" mode="horizontal" class="col-8 d-flex justify-content-center border-0 edo-menu" :collapse="false" :default-active="$store.state.nowPage" :data="$store.state.permissionMenu" />
       <div class="d-flex justify-content-center align-items-center info">
         <el-dropdown @command="me">
-          <span class="el-dropdown-link" style="cursor: pointer">
+          <span class="text-truncate " style="cursor: pointer">
             欢迎，{{ $store.state.userInfo.userName }}
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="3">作者博客</el-dropdown-item>
             <el-dropdown-item v-permission="'my/center'" command="1">个人中心</el-dropdown-item>
             <el-dropdown-item v-permission="'my/info'" command="2">我的资料</el-dropdown-item>
             <el-dropdown-item command="0" divided>退出登录</el-dropdown-item>
@@ -21,18 +21,18 @@
         </el-dropdown>
         <el-divider direction="vertical"></el-divider>
         <el-dropdown @command="setings">
-          <span class="el-dropdown-link" style="cursor: pointer">
+          <span class="" style="cursor: pointer">
             <i class="el-icon-s-operation" title="平台设置"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="3" v-if="!$store.state.showOpenedPages" divided>显示页签</el-dropdown-item>
             <el-dropdown-item command="1">切换布局</el-dropdown-item>
-            <el-dropdown-item command="0" divided>清除缓存</el-dropdown-item>
+            <!-- <el-dropdown-item command="0" divided>清除缓存</el-dropdown-item> -->
           </el-dropdown-menu>
         </el-dropdown>
         <el-divider direction="vertical"></el-divider>
         <el-dropdown @command="helps">
-          <span class="el-dropdown-link" style="cursor: pointer">
+          <span class="" style="cursor: pointer">
             <i class="fa fa-question-circle-o" aria-hidden="true" title="帮助"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
@@ -62,14 +62,17 @@
 <script>
 /**
  * @author        全易
- * @time          2020-10-05 16:38:30  星期一
+ * @time          2023-10-05 16:38:30  星期一
  * @description   导航条
  */
+// import themeColor from "./theme.json"
 import { permission } from '@/directives/index.js'
+import { NavMenu } from 'element-navmenu_vue'
 
 export default {
   name: "",
   components: {
+    NavMenu,
     "page-structure-drawer": () => import("./page-structure.vue")
   },
   directives: {
@@ -77,6 +80,7 @@ export default {
   },
   data() {
     return {
+      // themeColor,
       title: "",
       menus: [],
       isFullScreen: false,
@@ -103,17 +107,14 @@ export default {
         case "2":
           this.$router.push("/my/info");
           break;
-        case "3":
-          window.open("https://quanyi.blog.csdn.net")
-          break;
       }
     },
     // 平台设置
     setings(command) {
       switch (command) {
         case "0":
-          localStorage.clear();
-          location.href = "/logon";
+          // localStorage.clear();
+          //
           break;
         case "1":
           this.showPageStructureDrawer = true;
@@ -195,10 +196,5 @@ export default {
     align-items: center;
     padding: 10px;
   }
-}
-
-.depts {
-  max-height: 400px !important;
-  overflow-y: auto;
 }
 </style>

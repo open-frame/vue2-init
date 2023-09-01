@@ -1,5 +1,5 @@
 <template>
-  <vue-quill-editor class="editor" v-model="content" ref="quillEditor" :options="editorOption" @change="onEditorChange">
+  <vue-quill-editor class="editor" v-model="content" ref="editorDOM" :options="editorOption" @change="onEditorChange">
   </vue-quill-editor>
 </template>
 

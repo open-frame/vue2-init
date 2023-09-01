@@ -52,7 +52,7 @@
 import api from "@/service/api/login";
 
 export default {
-  name: "login-page",
+  name: "page-login",
   data() {
     return {
       previous: "/",
@@ -66,21 +66,21 @@ export default {
     };
   },
   created() {
-    const hasMenu = this.$store.state.permissionMenu.length > 0;
-    const userInfo = this.$store.state.userInfo;
-    const token = localStorage.getItem("token");
-    if (token && hasMenu && userInfo.userName) {
-      return this.$router.replace("/");
-    }
-
-    if (
-      !["/404", "/logon"].includes(this.$route.query.previous) &&
-      this.$route.query.previous !== ""
-    ) {
-      this.previous = this.$route.query.previous || "/";
+    this.isLoin();
+    const previous = this.$route.query.previous;
+    if (!["/404", "/logon"].includes(previous) && previous !== "") {
+      this.previous = previous || "/";
     }
   },
   methods: {
+    isLoin() {
+      const hasMenu = this.$store.state.permissionMenu.length > 0;
+      const userInfo = this.$store.state.userInfo;
+      const token = localStorage.getItem("token");
+      if (token && hasMenu && userInfo.userName) {
+        return this.$router.replace("/");
+      }
+    },
     // 账号登录
     accountLogin(formName) {
       this.loginText = "正在登录";

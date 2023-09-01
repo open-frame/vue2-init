@@ -42,7 +42,7 @@
 **/
 // import api from "@/service/api/process";
 import myAPI from "@/service/api/my";
-import $publicAPI from "@/service/public.js";
+import { dropdownsAPI } from "@/service/public.js";
 import { CodeTransforText } from 'code-transfor-text_vue'
 
 export default {
@@ -92,13 +92,13 @@ export default {
   methods: {
     getDropdowns() {
       // 审核结果
-      $publicAPI.dropdowns("426807").then((res) => {
+      dropdownsAPI("426807").then((res) => {
         if (res.code === 0) {
           this.dropdowns.status = res.data;
         }
       });
       // 申请类别
-      $publicAPI.dropdowns("3001").then((res) => {
+      dropdownsAPI("3001").then((res) => {
         if (res.code === 0) {
           this.dropdowns.restoreType = res.data;
         }
