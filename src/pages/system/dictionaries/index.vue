@@ -70,8 +70,8 @@ export default {
     return {
       loading: false,
       queryForm: {
-        codeType: "",
         comment: "",
+        codeType: "",
         pageSize: this.$tableDataSize,
         pageNum: 1,
       },
@@ -88,9 +88,7 @@ export default {
     // 表格数据
     getData() {
       this.loading = true;
-
       api.dictionaries(this.queryForm).then((res) => {
-
         this.loading = false;
         if (res.code === 0) {
           this.total = res.total;

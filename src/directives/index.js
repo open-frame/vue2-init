@@ -11,8 +11,7 @@ export const permission = {
   // 被绑定元素插入父节点时调用 (仅保证父节点存在，但不一定已被插入文档中)
   inserted(el, binding, vnode, oldVnode) {
     // console.log('inserted', binding);
-    const allPermission = [...$store.state.permissionPublic, ...$store.state.permissionButtons];
-    if (!allPermission.includes(binding.value)) {
+    if (!$store.state.permissionButtons.includes(binding.value)) {
       el.parentNode && el.parentNode.removeChild(el);
     }
   },

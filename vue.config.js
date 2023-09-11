@@ -2,7 +2,7 @@ const { defineConfig } = require('@vue/cli-service')
 const TerserWebpackPlugin = require('terser-webpack-plugin');
 const NodePolyfillWebpackPlugin = require("node-polyfill-webpack-plugin")
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
-
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 
 const CDNs = {
@@ -90,12 +90,14 @@ module.exports = defineConfig({
       args[0].CDNs = CDNs;
       return args
     });
-    if (process.env.NODE_ENV !== 'development') {
+    if (process.env.NODE_ENV === 'test') {
+      new BundleAnalyzerPlugin()
+    }
+    // if (process.env.NODE_ENV !== 'development') {
       // https://www.jianshu.com/p/865813b7cbb6
       // config.plugins.delete('prefetch')
       // config.plugins.delete('preload');
 
-      config.plugin('webpack-bundle-analyzer').use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin);
 
       // config.plugin("compression-webpack-plugin").use('compression-webpack-plugin', [{
       //   deleteOriginalAssets: false // 删除原文件
@@ -103,6 +105,6 @@ module.exports = defineConfig({
 
 
 
-    }
+    // }
   }
 })

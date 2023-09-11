@@ -16,6 +16,9 @@
     <link href="<%= path %>" rel="preload" as="style" />
     <link href="<%= path %>" rel="stylesheet" />
   <% } %>
+  <% for (let path of htmlWebpackPlugin.options.CDNs.js) { %>
+    <link href="<%= path %>" rel="preload" as="script" />
+  <% } %>
 </head>
 
 <body>

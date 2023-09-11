@@ -6,15 +6,11 @@ export const queryReset = {
         form = "queryForm";
       }
 
-      for (let item in this[form]) {
-        this[form][item] = "";
-        if (item === "pageNum") {
-          this[form]["pageNum"] = 1;
-        }
-        if (item === "pageSize") {
-          this[form]["pageSize"] = this.$tableDataSize;
-        }
-      }
+      this.$data[form] = this.$options.data()[form];
+
+      this[form]["pageNum"] = 1;
+      this[form]["pageSize"] = this.$tableDataSize;
+      
       this[method]();
       if (fn && typeof fn === "function") {
         fn()

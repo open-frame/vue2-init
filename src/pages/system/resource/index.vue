@@ -201,7 +201,8 @@ export default {
     // 监听文件地址选择
     "submitMenuForm.remark"(now) {
       console.log(now);
-      this.submitMenuForm.url = "/" + now.replace("/index", "");
+      this.submitMenuForm.url = now ? "/" + now.replace("/index", "") : "";
+      this.submitMenuForm.perms = now ? now.replace(/\//g, "-") : "";
     }
   },
   methods: {

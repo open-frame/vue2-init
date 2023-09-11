@@ -50,22 +50,19 @@ export default {
   setRouters(state, data) {
     // console.log("路由信息：", data);
     // 只保留有url的路由
-    let permissionPublic = []
     const retainURL = data.filter((item) => {
       // console.log(item);
       if (item.url !== "") {
-        permissionPublic.push(item.perms)
-        state.permissionPublic = permissionPublic;
         return item
       }
     });
     // console.log("路由数据：", retainURL);
 
     // 存储路由
+    state.permissionRouters = require("@/config/public-path.json"); // 开放路径
     state.permissionRouters.push(...retainURL.map(item => {
       return item.url;
     }));
-    state.permissionRouters = [...new Set(state.permissionRouters)]; // 去重
 
     // 路由结构化
     const structuringRoute = retainURL.map(item => {
