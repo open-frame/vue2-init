@@ -10,7 +10,7 @@
       </el-col>
     </el-row>
     <el-divider />
-    <edo-table ref="order-table" :loading="loading" :total="total" :data="tableData" height="560" row-key="orderId"
+    <eida-table ref="order-table" :loading="loading" :total="total" :data="tableData" height="560" row-key="orderId"
       :page-size="queryForm.pageSize" :current-page="queryForm.pageNum" @current-change="handleCurrentChange"
       @size-change="dataSizeChange" @exporting="exporting">
       <!-- <template v-slot:left></template> -->
@@ -49,7 +49,7 @@
           </template>
         </el-table-column>
       </template>
-    </edo-table>
+    </eida-table>
     <component :ref="componentName" :is="componentName" :params="componentParams" :show="formDialog"
       @close="formDialog = false" />
   </el-card>

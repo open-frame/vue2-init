@@ -1,6 +1,6 @@
 <template>
   <router-view v-if="$store.state.layout === '0'" />
-  <component v-else :is="'edo-container-'+$store.state.layout" :exclude="excludeKeepAlivePages" :include="includeKeepAlivePages">
+  <component v-else :is="'eida-container-'+$store.state.layout" :exclude="excludeKeepAlivePages" :include="includeKeepAlivePages">
     <router-view class="animate__animated animate__slideInLeft animate__faster border-top-0 m-3 mt-0 pages" />
   </component>
 </template>
@@ -16,9 +16,9 @@ import excludeKeepAlivePages from "@/config/exclude-keep-alive.json";
 export default {
   name: "main-file",
   components: {
-    "edo-container-1": () => import("@/components/container/1.vue"),
-    "edo-container-2": () => import("@/components/container/2.vue"),
-    "edo-container-3": () => import("@/components/container/3.vue"),
+    "eida-container-1": () => import("@/components/container/1.vue"),
+    "eida-container-2": () => import("@/components/container/2.vue"),
+    "eida-container-3": () => import("@/components/container/3.vue"),
   },
   data() {
     return {

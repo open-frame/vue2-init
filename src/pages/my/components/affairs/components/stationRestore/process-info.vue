@@ -2,7 +2,7 @@
   <div class="text-center">
     <div>
       <div class="fs-6 fw-bold text-start">审批信息</div>
-      <edo-table size="mini" :data="tableData">
+      <eida-table size="mini" :data="tableData">
         <template v-slot:columns>
           <el-table-column show-overflow-tooltip prop="processInstanceId" label="流程实例id">
           </el-table-column>
@@ -23,7 +23,7 @@
           <el-table-column show-overflow-tooltip prop="taskId" label="任务id">
           </el-table-column>
         </template>
-      </edo-table>
+      </eida-table>
     </div>
     <img :src="processImg" alt="流程图" srcset="">
   </div>

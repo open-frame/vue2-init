@@ -6,7 +6,7 @@
           :title="$store.state.isCollapse ? '展开菜单栏' : '折叠菜单栏'" @click="isCollapse"></i>
         <router-link class="text-decoration-none h4" to="/">{{ title }}</router-link>
       </div>
-      <nav-menu v-if="$store.state.layout === '3'" mode="horizontal" class="col-8 d-flex justify-content-center border-0 edo-menu" :collapse="false" :default-active="$store.state.nowPage" :data="$store.state.permissionMenu" />
+      <nav-menu v-if="$store.state.layout === '3'" mode="horizontal" class="col-8 d-flex justify-content-center border-0 eida-menu" :collapse="false" :default-active="$store.state.nowPage" :data="$store.state.permissionMenu" />
       <div class="d-flex justify-content-center align-items-center info">
         <el-dropdown @command="me">
           <span class="text-truncate " style="cursor: pointer">
@@ -37,7 +37,7 @@
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="1">使用帮助</el-dropdown-item>
-            <a href="mailto:quanyi@edo-iot.com?subject=问题反馈">
+            <a href="mailto:quanyi@eida-iot.com?subject=问题反馈">
               <el-dropdown-item command="2"> 反馈问题 </el-dropdown-item>
             </a>
             <a target="_blank" href="https://work.weixin.qq.com/kfid/kfcd894c0a8bc6d7627">

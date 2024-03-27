@@ -28,7 +28,7 @@
         <slot name="right"></slot>
       </div>
     </div>
-    <el-table ref="tableDOM" :size="size" :data="data" :[olyHeight]="height || maxHeight || '400'" :border="border"
+    <el-table ref="tableidaM" :size="size" :data="data" :[olyHeight]="height || maxHeight || '400'" :border="border"
       :row-key="rowKey" :empty-text="emptyText" v-loading="loading" :show-summary="showSummary"
       :summary-method="summaryMethod" tooltip-effect="dark" highlight-current-row @row-click="rowClick" @select="select"
       @select-all="selectAll" @selection-change="selectionChange" element-loading-text="拼命加载中"
@@ -58,7 +58,7 @@
  **/
 
 export default {
-  name: "edo-table",
+  name: "eida-table",
   data() {
     return {};
   },
@@ -141,7 +141,7 @@ export default {
     data(now, old) {
       const that = this;
       this.$nextTick(() => {
-        that.$refs.tableDOM.doLayout(); // 为了解决行错位问题
+        that.$refs.tableidaM.doLayout(); // 为了解决行错位问题
       });
     },
   },
@@ -189,19 +189,19 @@ export default {
     },
     // 清空选择
     clearSelection() {
-      this.$refs.tableDOM.clearSelection();
+      this.$refs.tableidaM.clearSelection();
     },
     // 全选
     toggleAllSelection() {
-      this.$refs.tableDOM.toggleAllSelection();
+      this.$refs.tableidaM.toggleAllSelection();
     },
     // 选择数据
     toggleRowSelection(row = [], selected = true) {
-      this.$refs.tableDOM.toggleRowSelection(row, selected);
+      this.$refs.tableidaM.toggleRowSelection(row, selected);
     },
     // 单选数据
     setCurrentRow(row) {
-      this.$refs.tableDOM.setCurrentRow(row);
+      this.$refs.tableidaM.setCurrentRow(row);
     },
     // 点击行
     rowClick(row, column, event) {
@@ -218,7 +218,7 @@ export default {
     },
     // 重载表格
     doLayout() {
-      this.$refs.tableDOM.doLayout();
+      this.$refs.tableidaM.doLayout();
     },
   },
 };

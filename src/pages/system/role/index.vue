@@ -21,7 +21,7 @@
       </el-col>
     </el-row>
     <el-divider />
-    <edo-table :loading="loading" :total="total" :data="tableData" height="550" row-key="roleId"
+    <eida-table :loading="loading" :total="total" :data="tableData" height="550" row-key="roleId"
       :page-size="queryForm.pageSize" :current-page="queryForm.pageNum" @selection-change="selectedDate"
       @size-change="dataSizeChange" @current-change="handleCurrentChange" @exporting="exporting" @printing="printing">
       <template v-slot:left>
@@ -55,7 +55,7 @@
           </template>
         </el-table-column>
       </template>
-    </edo-table>
+    </eida-table>
     <el-dialog :close-on-click-modal="false" :append-to-body="true" :modal-append-to-body="false"
       :title="dialogText + '角色'" :visible="dialogVisible" :before-close="closeSeeDetail">
       <el-form :model="roleForm" :rules="rules" ref="roleForm" label-width="100px">

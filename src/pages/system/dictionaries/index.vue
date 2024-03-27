@@ -15,7 +15,7 @@
       </el-col>
     </el-row>
     <el-divider />
-    <edo-table :loading="loading" :total="total" :data="tableData" height="570" :border="false" row-key="codeType"
+    <eida-table :loading="loading" :total="total" :data="tableData" height="570" :border="false" row-key="codeType"
       :page-size="queryForm.pageSize" :current-page="queryForm.pageNum" @current-change="handleCurrentChange"
       @size-change="dataSizeChange" @exporting="exporting" @printing="printing">
       <template v-slot:left>
@@ -38,7 +38,7 @@
           </template>
         </el-table-column>
       </template>
-    </edo-table>
+    </eida-table>
     <dictionariesList :show="editDictionDrawer" :data="dictionDetail" @before-close="closeDictionariesDrawer" />
   </el-card>
 </template>

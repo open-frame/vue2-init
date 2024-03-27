@@ -17,7 +17,7 @@ import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
 
 export default {
-  name: "edo-editor",
+  name: "eida-editor",
   components: { 'vue-quill-editor': quillEditor },
   props: {
     // 父组件v-model绑定的值

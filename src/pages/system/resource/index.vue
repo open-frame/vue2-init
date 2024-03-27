@@ -18,7 +18,7 @@
       </el-col>
     </el-row>
     <el-divider />
-    <edo-table :loading="loading" :data="tableData" height="550" row-key="menuId" :page-size="queryForm.pageSize"
+    <eida-table :loading="loading" :data="tableData" height="550" row-key="menuId" :page-size="queryForm.pageSize"
       :current-page="queryForm.pageNum">
       <template v-slot:left>
         <el-button v-permission="'function_edit'" size="small" icon="el-icon-plus"
@@ -61,7 +61,7 @@
           </template>
         </el-table-column>
       </template>
-    </edo-table>
+    </eida-table>
 
     <el-dialog :close-on-click-modal="false" :append-to-body="true" :modal-append-to-body="false"
       :title="dialogText + '资源'" :visible.sync="dialogVisible" :before-close="closeSeeDetail">

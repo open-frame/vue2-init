@@ -1,6 +1,6 @@
 <template>
   <el-card class="">
-    <edo-editor v-model="data" />
+    <eida-editor v-model="data" />
 
     数据：<br />
     {{ data }}
@@ -18,7 +18,7 @@
 export default {
   name: 'rich-editor-index',
   components: {
-    "edo-editor": () => import("@/components/article-editor.vue")
+    "eida-editor": () => import("@/components/article-editor.vue")
   },
   data() {
     return {

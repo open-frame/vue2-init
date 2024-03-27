@@ -21,7 +21,7 @@
       </el-col>
     </el-row>
     <el-divider />
-    <edo-table :loading="loading" :total="total" :data="tableData" height="600" row-key="userId"
+    <eida-table :loading="loading" :total="total" :data="tableData" height="600" row-key="userId"
       :page-size="queryForm.pageSize" :current-page="queryForm.pageNum" @selection-change="selectingdata"
       @size-change="dataSizeChange" @current-change="handleCurrentChange" @exporting="exporting">
       <template v-slot:left>
@@ -68,7 +68,7 @@
           </template>
         </el-table-column>
       </template>
-    </edo-table>
+    </eida-table>
     <el-dialog :close-on-click-modal="false" :append-to-body="true" :modal-append-to-body="false" :title="dialogText"
       :visible="showEditFormDialogrVisible" :show-close="false">
       <el-form :model="submitUserForm" :rules="rules" ref="submitUserForm" label-width="100px">
