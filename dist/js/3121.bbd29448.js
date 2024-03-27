@@ -1,1 +1,0 @@
-"use strict";(self["webpackChunkiov_platform"]=self["webpackChunkiov_platform"]||[]).push([[3121],{73121:function(e,n,r){r.r(n),r.d(n,{default:function(){return f}});var t=function(){var e=this,n=e._self._c;return n("el-card",{})},u=[],a={name:"property-inventory-check-index",data(){return{}},methods:{}},l=a,o=r(1001),c=(0,o.Z)(l,t,u,!1,null,"20e72376",null),f=c.exports}}]);

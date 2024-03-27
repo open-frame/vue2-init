@@ -1,0 +1,1 @@
+"use strict";(self["webpackChunkiov_platform"]=self["webpackChunkiov_platform"]||[]).push([[7632],{6867:function(e,t,n){n.d(t,{rd:function(){return s}});n(153);var o=n(2219);function s(e,t){const n=[...o.Z.state.permissionButtons,...o.Z.state.permissionRouters];n.includes(t.value)||e.parentNode&&e.parentNode.removeChild(e)}}}]);

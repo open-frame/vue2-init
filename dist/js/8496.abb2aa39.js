@@ -1,0 +1,1 @@
+"use strict";(self["webpackChunkiov_platform"]=self["webpackChunkiov_platform"]||[]).push([[8496],{8496:function(t,a,e){e.r(a),e.d(a,{microAppStart:function(){return n}});var p=e(6560),i=e(2219);const r="https://clw.eida.com";function n(){p.ZP.start({preFetchApps:[{name:"plateform-bigview",url:r+"/bigView/"}]}),p.ZP.setGlobalData({minAppData:i.Z.state})}}}]);

@@ -1,0 +1,1 @@
+"use strict";(self["webpackChunkiov_platform"]=self["webpackChunkiov_platform"]||[]).push([[4748,7853,5067,7342],{6572:function(e,n,o){o.d(n,{I:function(){return t},a:function(){return u}});var r=o(2617);function t(e,n){return r.o.get("/service/demo/loadHomeConfig.json",e,n)}function u(e,n){return r.o.get("/service/demo/newElecUser.json",e,n)}}}]);

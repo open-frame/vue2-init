@@ -1,0 +1,46 @@
+{
+  "total": 23563,
+  "rows": [
+    {
+      "balance": 3.00,
+      "integral": 0.00,
+      "loginName": "oinj75VO5mkO_OW9vvt8I4h1eo7E",
+      "chineseName": "",
+      "phonenumber": "18001367990",
+      "avatar": "",
+      "userName": "",
+      "userId": 38821,
+      "email": "",
+      "runStatus": "1",
+      "operationTime": "2023-06-16 11:24:14"
+    },
+    {
+      "balance": 99999.00,
+      "integral": 0.00,
+      "loginName": "oin7Y1Xgh-5J6gqBkQFIJ4JvOYtw",
+      "chineseName": "",
+      "phonenumber": "",
+      "avatar": "",
+      "userName": "",
+      "userId": 23684,
+      "email": "",
+      "runStatus": "1",
+      "operationTime": "2023-06-12 17:37:08"
+    },
+    {
+      "balance": 9576.93,
+      "integral": 23.07,
+      "loginName": "oin7Y1dD784edP3YTBu9Kv_6n5mE",
+      "chineseName": "卢生",
+      "phonenumber": "13926871001",
+      "avatar": "",
+      "userName": "",
+      "userId": 23683,
+      "email": "lusq@jctc.com.cn",
+      "runStatus": "1",
+      "operationTime": "2023-06-09 09:24:09"
+    }
+  ],
+  "code": 0,
+  "msg": ""
+}

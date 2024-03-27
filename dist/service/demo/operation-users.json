@@ -1,0 +1,112 @@
+{
+  "total": 62,
+  "rows": [
+    {
+      "createBy": "admin",
+      "createTime": "2022-08-25 12:50:17",
+      "deleted": 0,
+      "remark": "管理员",
+      "userId": 1,
+      "deptCode": "3",
+      "deptName": "全易 · vue2开发模板",
+      "loginName": "admin",
+      "userName": "管理员",
+      "email": "11@163.com",
+      "phonenumber": "8534234342",
+      "sex": "0",
+      "avatar": "",
+      "password": "$2a422F81g7Qvjgdf39q.SRU5XJ/7nSyO",
+      "salt": "b%#6.-/E",
+      "status": "0",
+      "delFlag": "0",
+      "loginIp": "203.93.121.134",
+      "loginDate": "2021-06-03 09:05:32",
+      "userType": "00",
+      "dept": {
+        "deptCode": "3",
+        "deptName": "全易 · vue2开发模板"
+      },
+      "admin": true
+    },
+    {
+      "createBy": "admin",
+      "createTime": "2023-02-14 10:09:01",
+      "deleted": 0,
+      "userId": 2,
+      "deptCode": "3000000",
+      "deptName": "亿度物联科技有限公司",
+      "loginName": "BJ2020nanqijia",
+      "userName": "全易",
+      "email": "1478877517@qq.com",
+      "phonenumber": "73524234",
+      "sex": "0",
+      "avatar": "",
+      "password": "$2a$10$JGuuZ4asVy7KxPTJzhNCgM3dmRol2",
+      "salt": "FH<Ns^K;",
+      "status": "0",
+      "delFlag": "0",
+      "loginIp": "203.93.121.134",
+      "loginDate": "2021-05-31 17:26:12",
+      "userType": "00",
+      "dept": {
+        "deptCode": "3000000",
+        "deptName": "亿度物联科技有限公司"
+      },
+      "admin": false
+    },
+    {
+      "createBy": "admin",
+      "createTime": "2022-09-03 15:13:21",
+      "deleted": 0,
+      "userId": 3,
+      "deptCode": "3",
+      "deptName": "全易 · vue2开发模板",
+      "loginName": "caiwu",
+      "userName": "王红",
+      "email": "1336@163.com",
+      "phonenumber": "6342324232",
+      "sex": "1",
+      "avatar": "",
+      "password": "$2a$10$GXLwVzs3b8emk4iU61qzmgDM8z5Y1IW84tu",
+      "salt": "flQx^:z2",
+      "status": "0",
+      "delFlag": "0",
+      "loginIp": "203.93.121.134",
+      "loginDate": "2021-06-07 09:16:36",
+      "userType": "00",
+      "dept": {
+        "deptCode": "3",
+        "deptName": "全易 · vue2开发模板"
+      },
+      "admin": false
+    },
+    {
+      "createBy": "admin",
+      "createTime": "2023-06-15 08:39:44",
+      "deleted": 0,
+      "userId": 4,
+      "deptCode": "3",
+      "deptName": "全易 · vue2开发模板",
+      "loginName": "jf123",
+      "userName": "贾峰",
+      "email": "yfx@qq.com",
+      "phonenumber": "133333333333",
+      "sex": "0",
+      "avatar": "助手小程序",
+      "password": "$23$10$1Fxm3E4u8ourqyoF9o0mRBFVuY8IBaf8h702",
+      "salt": "gxP|SPv4",
+      "status": "1",
+      "delFlag": "0",
+      "loginIp": "203.93.121.134",
+      "loginDate": "2021-06-04 11:52:02",
+      "userType": "00",
+      "dept": {
+        "deptCode": "3",
+        "deptName": "全易 · vue2开发模板"
+      },
+      "admin": false
+    }
+  ],
+  "code": 0,
+  "msg": ""
+}

@@ -1,1 +1,0 @@
-"use strict";(self["webpackChunkiov_platform"]=self["webpackChunkiov_platform"]||[]).push([[4691],{54691:function(t,a,n){n.r(a),n.d(a,{default:function(){return i}});var e=function(){var t=this,a=t._self._c;return a("div",{staticClass:"p-4"},[t._v(" 单一设备活跃度 ")])},r=[],u={name:"",data(){return{}}},l=u,s=n(1001),f=(0,s.Z)(l,e,r,!1,null,"bae1692a",null),i=f.exports}}]);

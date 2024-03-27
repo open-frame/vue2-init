@@ -1,1 +1,0 @@
-"use strict";(self["webpackChunkiov_platform"]=self["webpackChunkiov_platform"]||[]).push([[6666],{26666:function(t,e,n){n.r(e),n.d(e,{default:function(){return s}});var r=function(){var t=this,e=t._self._c;return e("div",{})},u=[],a={name:"",data(){return{}},methods:{}},l=a,f=n(1001),o=(0,f.Z)(l,r,u,!1,null,"4184018e",null),s=o.exports}}]);
