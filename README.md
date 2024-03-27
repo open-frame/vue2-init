@@ -284,6 +284,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 QQ：771184240
 
-csdn：https://quanyi.blog.csdn.net/
-
 在使用过程中有哪里不懂的可以随时发问
