@@ -55,12 +55,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
 
-# 在线预览
-
-https://init-project-vue2.inscode.cc 账号密码随便填
-
-
-
 # 运行环境
 
 > node 12+
