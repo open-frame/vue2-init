@@ -2,29 +2,17 @@ import $store from '@/store'
 import { Notification } from 'element-ui'
 
 
+
+
+// https://quanyi.blog.csdn.net/article/details/131324520
+
+
 // 权限
-export const permission = {
-  // bind声明周期, 只调用一次，指令第一次绑定到元素时调用。在这里可以进行一次性的初始化设置
-  bind(el, binding, vnode, oldVnode) {
-    // console.log('bind', binding);
-  },
-  // 被绑定元素插入父节点时调用 (仅保证父节点存在，但不一定已被插入文档中)
-  inserted(el, binding, vnode, oldVnode) {
-    // console.log('inserted', binding);
-    if (!$store.state.permissionButtons.includes(binding.value)) {
-      el.parentNode && el.parentNode.removeChild(el);
-    }
-  },
-  // 所在组件的 VNode 更新时调用，但是可能发生在其子 VNode 更新之前。指令的值可能发生了改变，也可能没有。但是你可以通过比较更新前后的值来忽略不必要的模板更新
-  update(el, binding, vnode, oldVnode) {
-    // console.log('update', binding);
-  },
-  // 指令所在组件的 VNode 及其子 VNode 全部更新后调用
-  componentUpdated(el, binding, vnode, oldVnode) {
-    // console.log('componentUpdated', binding);
-  },
-  unbind(el, binding, vnode, oldVnode) {
-    // console.log('unbind', binding);
+export function permission(el, data) {
+  // console.log(el, data);
+  const permissions = [...$store.state.permissionButtons, ...$store.state.permissionRouters];
+  if (!permissions.includes(data.value)) {
+    el.parentNode && el.parentNode.removeChild(el);
   }
 }
 
@@ -53,4 +41,18 @@ export function copy(el, data) {
     }
     el.removeChild(textarea);
   }
+}
+
+
+// 选择器滚动加载
+export function loadmore(el, data) {
+  const SELECTWRAP_DOM = el.querySelector('.el-select-dropdown .el-select-dropdown__wrap')
+  SELECTWRAP_DOM.addEventListener('scroll', function () {
+    const CONDITION = this.scrollHeight - this.scrollTop <= this.clientHeight
+    if (CONDITION) {
+      // binding.value 是指令的绑定值，该值可能是字符串，数字、函数
+      // binding.value() 表示执行 v-loadmore 绑定的函数
+      data.value()
+    }
+  })
 }

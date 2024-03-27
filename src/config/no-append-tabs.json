@@ -1,4 +1,6 @@
 [
+  "/overviews/plateform/*",
   "/logon",
+  "/403",
   "/404"
 ]

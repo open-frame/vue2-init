@@ -1,0 +1,1 @@
+"use strict";(self["webpackChunkiov_platform"]=self["webpackChunkiov_platform"]||[]).push([[8496],{88496:function(t,a,e){e.r(a),e.d(a,{microAppStart:function(){return r}});var o=e(36560),p=e(72219);const i="https://clw.edo-iot.com";function r(){o.ZP.start({preFetchApps:[{name:"plateform-bigview",url:i+"/bigView/"}]}),o.ZP.setGlobalData({minAppData:p.Z.state})}}}]);

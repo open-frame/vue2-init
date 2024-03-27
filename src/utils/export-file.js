@@ -1,54 +1,48 @@
 import { utils } from 'xlsx'
 import XLSXD from 'xlsx-style'
 
+
+
+// https://ask.csdn.net/questions/7839639/53991066
 export function exportExcel(json = [], name = "下载的文件") {
-    // 增加序号列
-    json = json.map((item, index) => {
-      return {
-        "序号": index + 1,
-        ...item
-      }
-    })
-    const excel = utils.book_new();
-    let sheet = utils.json_to_sheet(json);
+  // 增加序号列
+  json = json.map((item, index) => {
+    return {
+      "序号": index + 1,
+      ...item
+    }
+  })
+  const excel = utils.book_new();
+  let sheet = utils.json_to_sheet(json);
+  sheet = excelStyle(sheet);
+  sheet["!cols"] = aotoWidth(json);
 
-    sheet = excelStyle(sheet);
+  utils.book_append_sheet(excel, sheet);
+  // XLSX.writeFile(excel, name + ".xlsx"); // 使用XLSXD导出，因为有样式
 
-    // 合并单元格     s: 起始位置,   e: 结束位置,   r: 行,   c: 列
-    // sheet["!merges"] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 10 } }];
+  const file = new Blob([s2ab(
+    XLSXD.write(excel, {
+      bookType: 'xlsx',
+      bookSST: true,
+      type: 'binary',
+      cellStyles: true,
+    }))])
+  downExcel(file, name + ".xlsx");
+}
 
-    //  设置列宽  [第一列, 第而列, 第三列,  ... ];
-    // sheet["!rows"] = [{ wch: 50 }, { wch: 20 }, { wch: 40 }];
-    //  设置行高  [第一行, 第二行, 第三行,  ... ];
-    // sheet["!rows"] = [{ hpx: 25 }, { hpx: 38 }, { wch: 50 }];
+export function exportWord() {
 
-    sheet["!cols"] = aotoWidth(json);
+}
 
-    utils.book_append_sheet(excel, sheet);
-    // XLSX.writeFile(excel, name + ".xlsx"); // 使用XLSXD导出
-
-    const file = new Blob([s2ab(
-      XLSXD.write(excel, {
-        bookType: 'xlsx',
-        bookSST: true,
-        type: 'binary',
-        cellStyles: true,
-      }))])
-    downExcel(file, name + ".xlsx");
-  }
-
-export function exportWord(){
-
-  }
-  
 export function exportPDF() {
 
-  }
+}
 
 
 
 // 设置表格样式
 function excelStyle(sheet) {
+  // https://blog.csdn.net/qq_42618566/article/details/127978974
   const border = {
     top: {
       style: 'thin',
@@ -103,6 +97,7 @@ function excelStyle(sheet) {
 
 // 计算自适应列宽
 function aotoWidth(json) {
+  // https://ask.csdn.net/questions/7839639?weChatOA=weChatOA1
   // 1.所有表头字符的宽度
   const headsWidth = Object.keys(json[0]).map((value) => {
     if (!value) {

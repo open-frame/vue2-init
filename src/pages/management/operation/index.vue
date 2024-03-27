@@ -1,74 +1,73 @@
 <template>
   <el-card class="operation">
-    <el-row :gutter="20" class="filters">
-      <el-col :span="4">
-        <el-input clearable size="medium" v-model="queryForm.loginName" placeholder="登录账号" @change="pageReset"
-          @keyup.enter.native="getData"></el-input>
-      </el-col>
-      <el-col :span="4">
-        <el-input clearable size="medium" v-model="queryForm.phonenumber" placeholder="手机号码" @change="pageReset"
-          @keyup.enter.native="getData"></el-input>
-      </el-col>
-      <el-col :span="4">
-        <el-select filterable default-first-option clearable size="medium" v-model="queryForm.status" placeholder="账号状态"  @change="pageReset">
-          <el-option v-for="item in dropdowns.status" :key="item.code_value" :label="item.code_name"
-            :value="item.code_value"></el-option>
-        </el-select>
-      </el-col>
-      <el-col :span="12" class="text-end">
-        <el-button size="medium" type="primary" @click="getData">搜索</el-button>
-        <el-button size="medium" @click="queryReset">重置</el-button>
-      </el-col>
-    </el-row>
-    <el-divider />
-    <eida-table :loading="loading" :total="total" :data="tableData" height="600" row-key="userId"
-      :page-size="queryForm.pageSize" :current-page="queryForm.pageNum" @selection-change="selectingdata"
-      @size-change="dataSizeChange" @current-change="handleCurrentChange" @exporting="exporting">
-      <template v-slot:left>
-        <el-button v-permission="'function_edit'" size="small" icon="el-icon-plus" @click="editing('add')">新增</el-button>
-        <el-button v-permission="'function_delete'" size="small" icon="el-icon-delete"
-          @click="deleteing('more')">删除</el-button>
-      </template>
-      <!-- <template v-slot:right>
+    <data-filter :loading="loading" :btnSpan="24" :getData="getData" :queryReset="queryReset">
+          <el-col :span="6">
+            <clw-input clearable size="medium" v-model="queryForm.loginName" placeholder="登录账号" @change="pageReset"
+              @keyup.enter.native="getData"></clw-input>
+          </el-col>
+          <el-col :span="6">
+            <clw-input clearable size="medium" v-model="queryForm.userName" placeholder="客户姓名" @change="pageReset"
+              @keyup.enter.native="getData"></clw-input>
+          </el-col>
+          <el-col :span="6">
+            <clw-input clearable size="medium" v-model="queryForm.phonenumber" placeholder="手机号码" @change="pageReset"
+              @keyup.enter.native="getData"></clw-input>
+          </el-col>
+          <el-col :span="6">
+            <clw-select filterable default-first-option clearable size="medium" v-model="queryForm.status"
+              placeholder="账号状态" @change="pageReset">
+              <el-option v-for="item in dropdowns.status" :key="item.code_value" :label="item.code_name"
+                :value="item.code_value"></el-option>
+            </clw-select>
+          </el-col>
+        </data-filter>
+        <el-divider />
+        <custom-table ref="table" :loading="loading" :total="total" :data="tableData" height="600" row-key="userId"
+          :page-size="queryForm.pageSize" :current-page="queryForm.pageNum" @selection-change="selectingdata"
+          @size-change="dataSizeChange" @current-change="handleCurrentChange" :derive="exporting">
+          <template v-slot:left>
+            <el-button size="small" icon="el-icon-plus" @click="editing('add')">新增</el-button>
+            <el-button size="small" icon="el-icon-delete" @click="deleteing('more')">删除</el-button>
+          </template>
+          <!-- <template v-slot:right>
               表头上右侧容器
           </template> -->
-      <template v-slot:columns>
-        <el-table-column show-overflow-tooltip label="用户id" prop="userId">
-        </el-table-column>
-        <el-table-column show-overflow-tooltip label="登录账号" prop="loginName">
-        </el-table-column>
-        <el-table-column show-overflow-tooltip label="客户姓名" prop="userName">
-        </el-table-column>
-        <el-table-column show-overflow-tooltip label="客户性别">
-          <template slot-scope="scope">
-            {{ scope.row.sex | CodeTransforText(dropdowns.sex) }}
+          <template v-slot:columns>
+            <el-table-column show-overflow-tooltip label="用户id" prop="userId">
+            </el-table-column>
+            <el-table-column show-overflow-tooltip label="登录账号" prop="loginName">
+            </el-table-column>
+            <el-table-column show-overflow-tooltip label="客户姓名" prop="userName">
+            </el-table-column>
+            <el-table-column show-overflow-tooltip prop="sex" label="客户性别">
+              <template slot-scope="scope">
+                {{ scope.row.sex | transfortext(dropdowns.sex) }}
+              </template>
+            </el-table-column>
+            <el-table-column show-overflow-tooltip label="隶属组织" prop="deptName">
+            </el-table-column>
+            <el-table-column show-overflow-tooltip label="联系方式" prop="phonenumber">
+            </el-table-column>
+            <el-table-column show-overflow-tooltip label="邮箱" prop="email">
+            </el-table-column>
+            <el-table-column show-overflow-tooltip prop="status" label="客户状态">
+              <template slot-scope="scope">
+                {{ scope.row.status | transfortext(dropdowns.status) }}
+              </template>
+            </el-table-column>
+            <el-table-column show-overflow-tooltip label="加入时间" prop="createTime">
+            </el-table-column>
+            <el-table-column show-overflow-tooltip label="账号创建人" prop="createBy">
+            </el-table-column>
+            <el-table-column label="操作" width="240" fixed="right">
+              <template slot-scope="scope">
+                <el-button plain size="mini" v-permission="'function_edit'" type="primary" @click="editing('modification', scope.row)">编辑</el-button>
+                <el-button plain size="mini" type="danger" @click="deleteing('one', scope.row)">删除</el-button>
+                <el-button plain size="mini" @click="resetPassWord(scope.row)">修改密码</el-button>
+              </template>
+            </el-table-column>
           </template>
-        </el-table-column>
-        <el-table-column show-overflow-tooltip label="隶属组织" prop="deptName">
-        </el-table-column>
-        <el-table-column show-overflow-tooltip label="联系方式" prop="phonenumber">
-        </el-table-column>
-        <el-table-column show-overflow-tooltip label="邮箱" prop="email">
-        </el-table-column>
-        <el-table-column show-overflow-tooltip label="客户状态">
-          <template slot-scope="scope">
-            {{ scope.row.status | CodeTransforText(dropdowns.status, { name: "code_name", value: "code_value" }) }}
-          </template>
-        </el-table-column>
-        <el-table-column show-overflow-tooltip label="加入时间" prop="createTime">
-        </el-table-column>
-        <el-table-column show-overflow-tooltip label="操作" width="280" fixed="right">
-          <template slot-scope="scope">
-            <el-button plain v-permission="'function_edit'" @click="editing('modification', scope.row)" type="primary"
-              size="mini">编辑</el-button>
-            <el-button plain v-permission="'function_delete'" type="danger" size="mini"
-              @click="deleteing('one', scope.row)">删除</el-button>
-            <el-button plain v-permission="'function_password'" size="mini"
-              @click="resetPassWord(scope.row)">修改密码</el-button>
-          </template>
-        </el-table-column>
-      </template>
-    </eida-table>
+        </custom-table>
     <el-dialog :close-on-click-modal="false" :append-to-body="true" :modal-append-to-body="false" :title="dialogText"
       :visible="showEditFormDialogrVisible" :show-close="false">
       <el-form :model="submitUserForm" :rules="rules" ref="submitUserForm" label-width="100px">
@@ -79,9 +78,6 @@
         <el-form-item v-show="dialogText === '新增用户'" label="登陆密码" prop="password">
           <el-input v-model="submitUserForm.password" clearable show-password autocomplete="new-password"></el-input>
         </el-form-item>
-        <!-- <el-form-item label="隶属机构" prop="deptCode">
-          <organizations-select v-model="submitUserForm.deptCode" placeholder="" />
-        </el-form-item> -->
         <el-form-item label="姓名" prop="userName">
           <el-input v-model="submitUserForm.userName" clearable></el-input>
         </el-form-item>
@@ -101,7 +97,7 @@
           <el-select filterable default-first-option v-model="submitUserForm.roleIds" multiple clearable
             @change="selectUserRole" placeholder="">
             <el-option v-for="item in dropdowns.roles" :key="item.roleId" :label="item.roleName"
-              :value="item.roleId.toString()"></el-option>
+              :value="item.roleId"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="状态" prop="status">
@@ -111,9 +107,9 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="showEditFormDialogrVisible = false">取 消</el-button>
-        <el-button type="primary" @click="showEditFormDialogrVisible = false">确 定</el-button>
+      <span slot="footer">
+        <el-button @click="closeEditFormVisible('submitUserForm', closeEditDialog)">取 消</el-button>
+        <el-button type="primary" @click="submitForm('submitUserForm', dialogText)">确 定</el-button>
       </span>
     </el-dialog>
   </el-card>
@@ -122,68 +118,60 @@
 <script>
 /**
  * @author        全易
- * @time          2023-10-05 16:34:56  星期一
+ * @time          2020-10-05 16:34:56  星期一
  * @description   运营用户管理
  */
-import api from "@/service/api/management";
-import { exportExcel } from "@/utils/export-file";
-import { dropdownsAPI, allRolesAPI } from "@/service/public.js";
+
+import $secret from "@/utils/secret.js";
 import { permission } from '@/directives/index.js'
-import { CodeTransforText } from 'code-transfor-text_vue'
-import { queryReset, pageReset, pagination } from "@/mixins/index.js"
+import { transfortext } from "@/filters/index.js";
+import { dropdownsAPI, allRolesAPI } from "@/service/public.js";
+import {
+  editFormDialog,
+  queryReset,
+  pageReset,
+  pagination,
+  parseParmas,
+} from "@/mixins/index.js";
+import {
+  operationUsers,
+  operationUserDetail,
+  detectionOperationUserNameExist,
+  addOperationUsers,
+  editOperationUsers,
+  deleteOperationUsers,
+  operationUsersResetPassWord,
+} from "../api.js";
 
 export default {
   name: "management-operation-index",
-  mixins: [queryReset, pageReset, pagination],
+  mixins: [editFormDialog, queryReset, pageReset, pagination, parseParmas],
+  filters: {
+    transfortext,
+  },
   directives: {
     permission
   },
-  filters: {
-    CodeTransforText
-  },
   data() {
     return {
-      showEditFormDialogrVisible: false,
       loading: false,
       time: "",
       queryForm: {
+        userName: "",
         deptCode: "",
-        parentCode: "",
         loginName: "",
         phonenumber: "",
         status: "",
-        beginTime: "",
-        endTime: "",
         pageSize: this.$tableDataSize,
         pageNum: 1,
-        orderByColumn: "",
-        isAsc: "asc",
       },
       tableData: [],
       total: 0,
       moreSelect: [],
       dialogText: "",
       dropdowns: {
-        sex: [
-          {
-            name: "男",
-            value: "0"
-          },
-          {
-            name: "女",
-            value: "1"
-          }
-        ],
-        status: [
-          {
-            code_name: "正常",
-            code_value: "1"
-          },
-          {
-            code_name: "冻结",
-            code_value: "0"
-          }
-        ],
+        sex: [],
+        status: [],
         roles: [],
       },
       submitUserForm: {
@@ -202,18 +190,8 @@ export default {
     };
   },
   created() {
-    this.getData();
-    // this.getDropdowns();
+    this.getDropdowns();
   },
-  // watch: {
-  //   "submitUserForm.deptCode"(code) {
-  //     if (code) {
-  //       this.submitUserForm.deptName = this.organizations.find((item) => {
-  //         return item.deptCode === code;
-  //       }).label;
-  //     }
-  //   },
-  // },
   methods: {
     getDropdowns() {
       // 平台客户账号状态
@@ -230,30 +208,25 @@ export default {
         }
       });
     },
-    // 选择时间
-    selectTime(time) {
-      this.queryForm.pageNum = 1;
-      if (time === null) {
-        this.queryForm.beginTime = "";
-        this.queryForm.endTime = "";
-      } else {
-        console.log(time);
-        this.queryForm.beginTime = time[0];
-        this.queryForm.endTime = time[1];
-      }
-    },
     // 用户列表数据
     getData() {
+      this.tableData = [];
       this.loading = true;
-
-      api.operationUsers(this.queryForm).then((res) => {
+      operationUsers(this.queryForm).then((res) => {
         this.loading = false;
-
         if (res.code === 0) {
           this.total = res.total;
           this.tableData = res.rows;
         }
-      });
+      }).catch(() => {
+        this.loading = false;
+      })
+    },
+    // 点击树节点
+    organizationsTreeClick(data) {
+      console.log(data);
+      this.queryForm.deptCode = data.deptCode;
+      this.getData();
     },
     // 选择数据
     selectingdata(val) {
@@ -288,11 +261,12 @@ export default {
             trigger: "blur",
           },
         ];
+        this.addFormValidator();
       } else {
         this.dialogText = "修改用户";
         this.rules.password = [];
         this.deleteFormValidator();
-        api.operationUserDetail(data.userId).then((res) => {
+        operationUserDetail(data.userId).then((res) => {
           this.submitUserForm.loginName = res.data.user.loginName;
           this.submitUserForm.password = res.data.user.password;
           this.submitUserForm.deptCode = res.data.user.deptCode;
@@ -310,6 +284,33 @@ export default {
       allRolesAPI().then((res) => {
         if (res.code === 0) {
           this.dropdowns.roles = res.data.roles;
+        }
+      });
+    },
+    // 增加校验
+    addFormValidator() {
+      const that = this;
+      this.$nextTick(() => {
+        if (
+          !that.$refs["submitUserForm"].rules.loginName.find((item) => {
+            return item.validator;
+          })
+        ) {
+          that.$refs["submitUserForm"].rules.loginName.push({
+            validator: (rule, value, next) => {
+              detectionOperationUserNameExist({
+                loginName: value,
+                name: value,
+              }).then((res) => {
+                if (res === 1) {
+                  next(new Error("登录账号已存在，请换个账号试试"));
+                } else {
+                  next();
+                }
+              });
+            },
+            trigger: "blur",
+          });
         }
       });
     },
@@ -337,6 +338,16 @@ export default {
           if (type === "修改用户") {
             delete this.submitUserForm.password;
           }
+
+          if (type === "新增用户") {
+            this.submitUserForm.password = $secret.encrypt(
+              this.submitUserForm.password
+            );
+          }
+          const api = {
+            addOperationUsers,
+            editOperationUsers,
+          };
           api[type === "新增用户" ? "addOperationUsers" : "editOperationUsers"](
             this.submitUserForm
           ).then((res) => {
@@ -386,18 +397,16 @@ export default {
             }
             ids = ids.join();
           }
-          console.log(ids);
-          api
-            .deleteOperationUsers({
-              ids: ids,
-            })
-            .then((res) => {
-              if (res.code === 0) {
-                this.$message.success("删除成功");
-                this.getData();
-                this.moreSelect = [];
-              }
-            });
+
+          deleteOperationUsers({
+            ids: ids,
+          }).then((res) => {
+            if (res.code === 0) {
+              this.$message.success("删除成功");
+              this.getData();
+              this.moreSelect = [];
+            }
+          });
         })
         .catch(() => { });
     },
@@ -411,58 +420,37 @@ export default {
       })
         .then((password) => {
           console.log(password);
-          api
-            .operationUsersResetPassWord({
-              userId: data.userId,
-              loginName: data.loginName,
-              password: password.value,
-            })
-            .then(() => {
+
+          operationUsersResetPassWord({
+            userId: data.userId,
+            loginName: data.loginName,
+            password: $secret.encrypt(password.value),
+          }).then((res) => {
+            if (res.code === 0) {
               that.$message.success("修改成功");
-            });
+            }
+          });
         })
         .catch(() => { });
     },
     // 导出列表
-    exporting(command) {
-      console.log(command);
-      if (this.tableData.length < 1) {
-        this.$message.warning("无数据可导");
-        return false;
-      }
-
-      const downLoading = this.$loading({
-        lock: true,
-        text: "正在获取数据...",
-        spinner: "el-icon-loading",
-        background: "rgba(0, 0, 0, 0.7)",
-      });
-
+    async exporting(command) {
       let params = { ...this.queryForm };
       if (command === "2") {
         params.pageSize = this.total;
         params.pageNum = 1;
       }
-
-      api.operationUsers(params).then((res) => {
-        if (res.code === 0) {
-          downLoading.text = "正在下载...";
-          const data = res.rows.map((item) => {
-            return {
-              用户ID: item.userId,
-              登陆账号: item.loginName,
-              昵称: item.userName,
-              隶属组织: item.deptName,
-              联系方式: item.phonenumber,
-              使用状态: `${this.$options.filters.CodeTransforText(item.status, this.dropdowns.status)}`,
-              创建时间: item.createTime,
-            };
-          });
-          exportExcel(data, "运营用户列表");
-        }
-      }).finally(() => {
-        downLoading.close();
-      });
+      const result = await operationUsers(params)
+      if (result.code === 0) {
+        const columns = this.$refs.table.getColumns();
+        const data = result.rows.map((item) => {
+          let column = columns.map(key => {
+            return [key.label, `${transfortext(item[key.prop], this.dropdowns[key.prop])}`]
+          })
+          return Object.fromEntries(column);
+        });
+        return data;
+      }
     },
   },
 };

@@ -10,7 +10,7 @@
         </el-select>
       </el-form-item>
     </el-form>
-    <div slot="footer" class="dialog-footer">
+    <div slot="footer">
       <el-button @click="close">关 闭</el-button>
       <el-button type="primary" @click="okLayout">确 定</el-button>
     </div>
@@ -24,13 +24,13 @@
 * @description   模块管理
 **/
 import allComponent from "@/assets/json/home_modules.json";
-import api from "@/service/api/home";
-import { permission } from '@/directives/index.js'
+import {editHomeLayout} from "../api.js";
+import { permission } from "@/directives/index.js";
 
 export default {
   name: '',
-   directives: {
-    permission
+  directives: {
+    permission,
   },
   data() {
     return {
@@ -79,8 +79,7 @@ export default {
     },
     // 确定调整布局
     okLayout() {
-      api
-        .editHomeLayout({
+        editHomeLayout({
           homeJson: JSON.stringify(this.editPanelForm.components),
         })
         .then((res) => {

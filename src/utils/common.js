@@ -56,7 +56,31 @@ export function getNearMonth(timing, number) {
 
 
 
+// 计算时间差
+export function differTime(startTime, endTime) {
+  // const startTime = '2015-05-01 00:00:00'; //开始时间
+  // const endTime = '2015-08-01 00:00:00'; //结束时间
+  const date3 = new Date(endTime).getTime() - new Date(startTime).getTime(); //时间差的毫秒数      
 
+  //计算出相差天数
+  const days = Math.floor(date3 / (24 * 3600 * 1000))
+  //计算出小时数
+  const leave1 = date3 % (24 * 3600 * 1000) //计算天数后剩余的毫秒数
+  const hours = Math.floor(leave1 / (3600 * 1000))
+  //计算相差分钟数
+  const leave2 = leave1 % (3600 * 1000) //计算小时数后剩余的毫秒数
+  const minutes = Math.floor(leave2 / (60 * 1000))
+  //计算相差秒数
+  const leave3 = leave2 % (60 * 1000) //计算分钟数后剩余的毫秒数	
+  const seconds = Math.round(leave3 / 1000)
+
+  // console.log("时间差：", days, hours, minutes, seconds);
+  let text = days > 0 ? days + "天 " : "";
+  text += hours > 0 ? hours + "小时" : "";
+  text += minutes > 0 ? minutes + "分钟" : "";
+  text += seconds > 0 ? seconds + "秒" : "";
+  return text;
+}
 
 
 

@@ -1,17 +1,19 @@
 <template>
-  <el-table class="withdraw" highlight-current-row size="mini" :data="tableData" tooltip-effect="dark"
-    @row-dblclick="see">
-    <el-table-column show-overflow-tooltip label="状态" width="110">
-      <template slot-scope="scope">
-        {{ scope.row.approveStatus | CodeTransforText(dropdowns.approveStatus) }}
-      </template>
-    </el-table-column>
-    <el-table-column show-overflow-tooltip prop="userId" label="申请人账号">
-    </el-table-column>
-    <el-table-column show-overflow-tooltip prop="backMoney" label="提现额" width="90"> </el-table-column>
-    <el-table-column show-overflow-tooltip prop="createTime" label="申请时间">
-    </el-table-column>
-  </el-table>
+  <custom-table ref="table" size="mini" :data="tableData" @row-dblclick="see" empty-text="暂无提现用户">
+    <template v-slot:columns>
+      <el-table-column show-overflow-tooltip label="状态" width="110">
+        <template slot-scope="scope">
+          {{ scope.row.approveStatus | transfortext(dropdowns.approveStatus) }}
+        </template>
+      </el-table-column>
+      <el-table-column show-overflow-tooltip prop="userId" label="申请人账号">
+      </el-table-column>
+      <el-table-column show-overflow-tooltip prop="backMoney" label="提现额" width="90"> </el-table-column>
+      <el-table-column show-overflow-tooltip prop="createTime" label="申请时间">
+      </el-table-column>
+      <!-- <el-table-column show-overflow-tooltip prop="balance" label="余额"> </el-table-column> -->
+    </template>
+  </custom-table>
 </template>
 
 <script>
@@ -20,14 +22,16 @@
  * @time          2021-02-07 16:57:38  星期天
  * @description   用户提现
  */
-// import api from "@/service/api/settlement";
+// import { withdraws } from "@/pages/settlement/api.js";
 import { dropdownsAPI } from "@/service/public.js";
-import { CodeTransforText } from 'code-transfor-text_vue'
+import { transfortext } from "@/filters/index.js";
+import { parseParmas } from "@/mixins/index.js";
 
 export default {
   name: "users-withdraw",
-  filters:{
-    CodeTransforText
+  mixins: [parseParmas],
+  filters: {
+    transfortext
   },
   data() {
     return {
@@ -38,8 +42,8 @@ export default {
     };
   },
   created() {
-    // this.getData();
-    // this.getDrapdowns();
+    this.getDrapdowns();
+    this.getData()
   },
   methods: {
     getDrapdowns() {
@@ -51,16 +55,15 @@ export default {
       });
     },
     getData() {
-      // api
-      //   .withdraws({
-      //     pageNum: 1,
-      //     pageSize: 5,
-      //     refundOrder: "",
-      //     phoneNumber: "",
-      //     userId: "",
-      //     userName: "",
-      //     status: "",
-      //   })
+      // withdraws({
+      //   pageNum: 1,
+      //   pageSize: 5,
+      //   refundOrder: "",
+      //   phoneNumber: "",
+      //   userId: "",
+      //   userName: "",
+      //   status: "",
+      // })
       //   .then((res) => {
 
       //     if (res.code === 0) {
@@ -72,7 +75,7 @@ export default {
       console.log(data);
       this.$router.push({
         name: "settlement-user-account-withdraw",
-        params: { userId: data.loginName, panel: "1" },
+        params: { userId: data.userId, },
       });
     },
   },

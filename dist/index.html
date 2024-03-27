@@ -1,0 +1,145 @@
+<!doctype html><html lang=""><head><title>全易 · vue2开发模板</title><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=7"><meta http-equiv="X-UA-Compatible" content="ie=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="author" content="亿度物联"/><meta name="description" content="针对于现在生活环境中缺少公共电力的能源使用，在人们日常生活中在外用电的环境不便，且对于电动车充电的安全考虑，我们做出了这款公共用电的产品，在使用上直接寄托于小程序平台，方便简洁。在技术层面我们使用了阿里云物联平台，终端设备6s进行数据上报，使用hadoop大数据平台进行实时数据处理监测，针对用电压力推出三档收费，对用户页面进行快速简洁式的优化"><meta name="keywords" content="扫码充电管理平台,扫码充电运营平台,伊莎,伊莎能源,亿度物联,亿度,充电,电动车充电,用电运营平台,用电商户合作,充电桩接入合作,扫码用电,共享充电,新能源汽车充电"><meta name="copyright" content="本页版权亿度物联所有。All Rights Reserved"/><link rel="icon" type="image/x-ico" href="/logo.icon"><script defer="defer" src="/js/runtime~app.0fa322c0.js"></script><script defer="defer" src="/js/npm.element-ui.161adffa.js"></script><script defer="defer" src="/js/npm.core-js.6513ae4e.js"></script><script defer="defer" src="/js/npm.babel-runtime.4e072e58.js"></script><script defer="defer" src="/js/npm.axios.2784d8b0.js"></script><script defer="defer" src="/js/npm.async-validator.3bf8ae90.js"></script><script defer="defer" src="/js/npm.assert.1db3d034.js"></script><script defer="defer" src="/js/npm.util.12456b60.js"></script><script defer="defer" src="/js/npm.throttle-debounce.27a99fb3.js"></script><script defer="defer" src="/js/npm.object-keys.61bdd1f8.js"></script><script defer="defer" src="/js/npm.vuex-persist.3a77511a.js"></script><script defer="defer" src="/js/npm.has-symbols.3eea4e8d.js"></script><script defer="defer" src="/js/npm.vue.f584eb07.js"></script><script defer="defer" src="/js/npm.flatted.70fe9ab6.js"></script><script defer="defer" src="/js/npm.vuex.5832347c.js"></script><script defer="defer" src="/js/npm.vue-router.27a98bd5.js"></script><script defer="defer" src="/js/npm.resize-observer-polyfill.bf59b8ea.js"></script><script defer="defer" src="/js/npm.process.7cfc71ea.js"></script><script defer="defer" src="/js/npm.node-polyfill-webpack-plugin.d9c12202.js"></script><script defer="defer" src="/js/npm.is-callable.db74f10e.js"></script><script defer="defer" src="/js/npm.ieee754.e1b73650.js"></script><script defer="defer" src="/js/npm.get-intrinsic.d8c2fcba.js"></script><script defer="defer" src="/js/npm.deepmerge.77b4b294.js"></script><script defer="defer" src="/js/npm.base64-js.c2f60e33.js"></script><script defer="defer" src="/js/chunk-vendors.ddca4f78.js"></script><script defer="defer" src="/js/app.a959521a.js"></script><link href="/css/2320.ee6a2b03.css" rel="stylesheet"><link href="/css/app.6edf3a75.css" rel="stylesheet"></head><body class="m-0"><div id="app"><div class="loading"><div style="text-align: center;"><div class="loading-icon"><div></div><div></div><div></div><div></div></div><div class="loading-text">Loading</div></div></div><style>.loading {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .loading-icon {
+        width: 150px;
+        height: 100px;
+      }
+
+      .loading-icon,
+      .loading-icon>div {
+        position: relative;
+        box-sizing: border-box;
+      }
+
+      .loading-icon {
+        display: block;
+        font-size: 0;
+        color: #000;
+      }
+
+      .loading-icon.la-dark {
+        color: #333;
+      }
+
+      .loading-icon>div {
+        display: inline-block;
+        float: none;
+        background-color: currentColor;
+        border: 0 solid currentColor;
+      }
+
+
+
+      .loading-icon>div:nth-child(1) {
+        position: absolute;
+        bottom: 32%;
+        left: 18%;
+        width: 14px;
+        height: 14px;
+        border-radius: 100%;
+        transform-origin: center bottom;
+        animation: ball-climbing-dot-jump 0.6s ease-in-out infinite;
+      }
+
+      .loading-icon>div:not(:nth-child(1)) {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 14px;
+        height: 2px;
+        border-radius: 0;
+        transform: translate(60%, 0);
+        animation: ball-climbing-dot-steps 1.8s linear infinite;
+      }
+
+      .loading-icon>div:not(:nth-child(1)):nth-child(2) {
+        animation-delay: 0ms;
+      }
+
+      .loading-icon>div:not(:nth-child(1)):nth-child(3) {
+        animation-delay: -600ms;
+      }
+
+      .loading-icon>div:not(:nth-child(1)):nth-child(4) {
+        animation-delay: -1200ms;
+      }
+
+      @keyframes ball-climbing-dot-jump {
+        0% {
+          transform: scale(1, 0.7);
+        }
+
+        20% {
+          transform: scale(0.7, 1.2);
+        }
+
+        40% {
+          transform: scale(1, 1);
+        }
+
+        50% {
+          bottom: 125%;
+        }
+
+        46% {
+          transform: scale(1, 1);
+        }
+
+        80% {
+          transform: scale(0.7, 1.2);
+        }
+
+        90% {
+          transform: scale(0.7, 1.2);
+        }
+
+        100% {
+          transform: scale(1, 0.7);
+        }
+      }
+
+      @keyframes ball-climbing-dot-steps {
+        0% {
+          top: 0;
+          right: 0;
+          opacity: 0;
+        }
+
+        50% {
+          opacity: 1;
+        }
+
+        100% {
+          top: 100%;
+          right: 100%;
+          opacity: 0;
+        }
+      }
+
+
+
+      .loading-text {
+        margin-top: 35px;
+        font-size: 22px;
+        letter-spacing: 7px;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #666;
+        animation: loading-animation 1s ease-in infinite alternate;
+      }
+
+      @keyframes loading-animation {
+        0% {
+          filter: blur(0px);
+          transform: skew(0deg);
+        }
+
+        100% {
+          filter: blur(3px);
+          transform: skew(-4deg);
+        }
+      }</style></div><script defer="defer" src="https://webapi.amap.com/maps?v=2.0&key=a0d073450dad9a6bc15a73f0722c917c"></script></body></html>

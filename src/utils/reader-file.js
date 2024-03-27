@@ -2,7 +2,7 @@ import { read, utils } from "xlsx";
 
 
 export default {
-  // excel表格转json数据
+  // excel表格转json数据 https://blog.csdn.net/qq_42618566/article/details/107617716
   excel_to_json(file) {
     console.log(file);
     return new Promise((resolve, reject) => {

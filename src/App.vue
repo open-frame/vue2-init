@@ -22,11 +22,18 @@ export default {
     }
   },
   watch: {
-    "$store.state.userInfo"(now) {
-      // 有用户信息了，说明登陆了
-      if (Object.keys(now).length) {
-        this.microAppStart()
-      }
+    "$store.state.userInfo": {
+      deep: true,
+      handler(now, old) {
+        // 有用户信息了，说明登陆了
+        if (Object.keys(now).length) {
+          this.$nextTick(async function () {
+            // 为了加载登录页面时不加载子应用资源，降低首屏加载的压力
+            const microApp = await import("@/utils/micro-app.js");
+            microApp.microAppStart(); // 子应用启动
+          })
+        }
+      },
     },
   },
   methods: {
@@ -52,30 +59,15 @@ export default {
           this.$store.commit("setUserInfo", res.data);
         }
       });
-    },
-    // 子应用启动
-    async microAppStart() {
-      const hasMenu = this.$store.state.permissionMenu.length > 0;
-      const userInfo = this.$store.state.userInfo;
-      const token = localStorage.getItem("token");
-      if (token && hasMenu && userInfo.userName) {
-        const microApp = await import("@/utils/fetch-micro-app.js");
-        microApp.microAppStart(); // 子应用启动
-      }
     }
   },
 };
 </script>
 
 <style lang="less">
-
-
 // 全局样式文件
 @import url("./assets/css/element.less");
 @import url("./assets/css/style.less");
-
-
-
 
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;

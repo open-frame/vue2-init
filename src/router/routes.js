@@ -3,10 +3,19 @@ const publicRouter = [
   {
     path: '/404',
     name: 'page-404',
-    component: () => import('@/pages/404'),
+    component: () => import('@/pages/error/404.vue'),
     meta: {
       title: '无此页',
       id: "page-404" // 全局唯一
+    }
+  },
+  {
+    path: '/403',
+    name: 'page-403',
+    component: () => import('@/pages/error/403.vue'),
+    meta: {
+      title: '无权限',
+      id: "page-403" // 全局唯一
     }
   },
   {
@@ -17,21 +26,6 @@ const publicRouter = [
       title: '账号登录',
       id: "page-login"// 全局唯一
     }
-  },
-  {
-    path: '/',
-    name: 'main-file',
-    component: () => import("@/pages/main.vue"),
-    redirect: "/home",
-    children: [
-      {
-        path: '/overviews/plateform*',
-        component: () => import('@/pages/overviews/plateform'),
-        meta: {
-          menuType: "0"
-        }
-      }
-    ]
   }
 ];
 

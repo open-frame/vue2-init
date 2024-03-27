@@ -1,5 +1,5 @@
 <template>
-  <vue-quill-editor class="editor" v-model="content" ref="editorDOM" :options="editorOption" @change="onEditorChange">
+  <vue-quill-editor class="editor" v-model="content" ref="quillEditor" :options="editorOption" @change="onEditorChange">
   </vue-quill-editor>
 </template>
 
@@ -17,8 +17,8 @@ import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
 
 export default {
-  name: "eida-editor",
-  components: { 'vue-quill-editor': quillEditor },
+  name: "article-editor",
+  components: { "vue-quill-editor": quillEditor },
   props: {
     // 父组件v-model绑定的值
     value: {
@@ -31,7 +31,7 @@ export default {
       immediate: true, // 立即处理 进入页面就触发
       handler(now, old) {
         this.content = now;
-      }
+      },
     },
   },
   data() {
@@ -62,28 +62,43 @@ export default {
 const toolbarOptions = [
   // 加粗、斜体、下划线、删除线、
   ["bold", "italic", "underline", "strike"],
-  // 链接、图片、视频
-  // ["link", "image", "video"],
+
+  // 链接
+  // ["link"],
+
+  // 图片、视频
+  ["image", "video"],
+
   // 引用、代码块
-  // ["blockquote", "code-block"],
+  ["blockquote", "code-block"],
+
   // 文本颜色、文本背景色
   [{ color: [] }, { background: [] }],
+
   // 有序、无序列表
   [{ list: "ordered" }, { list: "bullet" }],
+
   // 上标/下标
   [{ script: "sub" }, { script: "super" }],
+
   // 缩进
-  // [{ indent: "-1" }, { indent: "+1" }],
+  [{ indent: "-1" }, { indent: "+1" }],
+
   // 文本方向
-  // [{ direction: "rtl" }],
+  [{ direction: "rtl" }],
+
   // 对齐方式
   [{ align: [] }],
+
   // 字号
   [{ size: ["small", false, "large", "huge"] }],
+
   // 标题
   [{ header: [1, 2, 3, 4, 5, 6, false] }],
-  // 字体种类
-  // [{ font: [] }],
+
+  // 字体
+  [{ font: [] }],
+
   // 清除内容格式
   ["clean"],
 ];
@@ -91,8 +106,11 @@ const toolbarOptions = [
 
 <style lang="less" scoped>
 .editor {
+  line-height: normal;
+
   ::v-deep .ql-editor {
-    height: 270px;
+    min-height: 270px;
+    max-height: 600px;
   }
 }
 </style>

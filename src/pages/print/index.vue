@@ -12,7 +12,7 @@
 * @description  展示打印
 **/
 
-import api from "@/service/api/management";
+// import api from "@/service/api/management";
 
 export default {
   name: 'print-index',
@@ -26,11 +26,11 @@ export default {
   },
   methods: {
     getData() {
-      api.roleList().then((res) => {
-        if (res.total) {
-          this.tableData = res.rows;
-        }
-      });
+      // api.roleList().then((res) => {
+      //   if (res.total) {
+      //     this.tableData = res.rows;
+      //   }
+      // });
     },
     // 打印订单表
     printing() {

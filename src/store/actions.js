@@ -1,16 +1,16 @@
-import http from '../service/index'
+import {axios} from '@/service/index'
 
 
 export default {
   // 权限路由
-  routers: (params, config) => {
-    return http.get("/service/demo/routers.json", params, config);
+  routers: (state, params, config) => {
+    return axios.get("/service/demo/refresh.json", params, config);
   },
 
   // 用户信息
-  userInfo(params, config) {
-    return http.get("/service/demo/user-info.json", params, config)
+  userInfo(state, params, config) {
+    return axios.get("/service/demo/current.json", params, config)
   },
 
-  
+
 }

@@ -1,11 +1,12 @@
 <template>
-  <el-table class="today-new-users" highlight-current-row size="mini" :data="tableData" tooltip-effect="dark"
-    empty-text="今日暂无新增用户" @row-dblclick="see">
-    <el-table-column show-overflow-tooltip prop="loginName" label="账号">
-    </el-table-column>
-    <el-table-column show-overflow-tooltip prop="balance" label="余额"> </el-table-column>
-    <el-table-column show-overflow-tooltip prop="integral" label="积分"> </el-table-column>
-  </el-table>
+  <custom-table ref="table" size="mini" :data="tableData" @row-dblclick="see" empty-text="今日暂无新增用户">
+    <template v-slot:columns>
+      <el-table-column show-overflow-tooltip prop="loginName" label="账号">
+      </el-table-column>
+      <el-table-column show-overflow-tooltip prop="balance" label="余额"> </el-table-column>
+      <el-table-column show-overflow-tooltip prop="integral" label="积分"> </el-table-column>
+    </template>
+  </custom-table>
 </template>
 
 <script>
@@ -14,27 +15,26 @@
  * @time          2021-02-07 11:12:14  星期天
  * @description   新增用户
  */
-import api from "@/service/api/home";
+import { todyNewUsers } from "../api.js";
 
 export default {
-  name: "today-new-users",
+  name: "new-users",
   data() {
     return {
       tableData: [],
     };
   },
   created() {
-    this.todyNewUsers();
+    this.getData();
   },
   methods: {
     // 今日新增用户
-    todyNewUsers() {
-      api
-        .todyNewUsers({
-          pageNum: 1,
-          pageSize: 99,
+    getData() {
+      todyNewUsers({
+        pageNum: 1,
+        pageSize: 99,
 
-        })
+      })
         .then((res) => {
 
           this.tableData = res.rows;

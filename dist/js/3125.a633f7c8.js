@@ -1,0 +1,1 @@
+"use strict";(self["webpackChunkiov_platform"]=self["webpackChunkiov_platform"]||[]).push([[3125],{73125:function(t,n,r){r.r(n),r.d(n,{default:function(){return c}});var u=function(){var t=this,n=t._self._c;return n("div",{staticClass:"p-4"},[t._v(" 累计安装数量 ")])},a=[],e={name:"",data(){return{}}},l=e,s=r(1001),f=(0,s.Z)(l,u,a,!1,null,"588bc3f2",null),c=f.exports}}]);

@@ -42,7 +42,7 @@
         "menuName": "看盘",
         "parentId": 0,
         "orderNum": "0",
-        "url": "/home",
+        "url": "/",
         "menuType": "4",
         "visible": "0",
         "perms": "home/index",

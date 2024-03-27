@@ -4,20 +4,20 @@
 
 > - 配置了Vue全家桶技术栈、全局监听摁钮防抖事件、打包Gzip技术
 > - 引入了[bootstrap5](https://v5.bootcss.com/docs/utilities/background/)样式库、[bootstrap-icons](https://icons.bootcss.com/)、Font Awesome4图标库
->
-> - 内置了动态路由、权限验证、请求拦截、响应拦截
+>- 内置了动态路由、权限验证、请求拦截、响应拦截
 > - 封装了复制文本、数字千位符、cdn方法等实用小功能
->
 > - 集成了一系列常用好用的小插件，免去技术选型和技术试错的困扰
->
-> - 预设了三种界面布局方式
-> - 运用了vue过滤器、vue指令、vue混入、vue组件，将vue的优势发挥的淋漓尽致
+>- 预设了三种界面布局方式
+> - 引入了unocss量子化样式引擎，搭配iconify异步图标，性能提升不止一点点
+>- 运用了vue过滤器、vue指令、vue混入、vue组件，将vue的优势发挥的淋漓尽致
 
 最大的优点就是足够轻量，易拓展、好上手、可塑性极强。
 
 
 
+# node环境
 
+注意看 `.nvmrc` 文件
 
 
 

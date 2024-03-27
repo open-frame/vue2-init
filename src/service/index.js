@@ -10,6 +10,8 @@ axios.defaults.headers = {
   'Content-Type': 'application/json; charset=utf-8'
 }
 
+
+let axiosPromise = [];
 // 请求拦截
 axios.interceptors.request.use(
   (request) => {
@@ -17,12 +19,19 @@ axios.interceptors.request.use(
     if (noTokenAPI.includes(request.url)) {
       return request;
     }
+    
     const token = localStorage.getItem('token');
     if (token) {
-      request.headers['Authorization'] = "Bearer " + token;
+      request.headers['Authorization'] = request.url === `${process.env.VUE_APP_ORIGIN}/login` ? `` : `Bearer ${token}`;
     } else {
-      $store.commit("logout", "1");
+      if (request.url !== `${process.env.VUE_APP_ORIGIN}/login`) {
+        $store.commit("logout", "1");
+      }
     }
+    request.cancelToken = new axios.CancelToken(cancel => {
+      axiosPromise.push({ ...request, cancel })
+    })
+
     return request;
   },
   (error) => {
@@ -34,23 +43,28 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   (response) => {
     // console.log(response)
-    if (response.data.hasOwnProperty('code')) {
-      if (response.data.code === 2001 && location.pathname !== "/logon") {
-        $store.commit("logout", "1");
-      }
-      if (response.data.code !== 0) {
-        Message.error(response.data.msg);
-      }
+    if (response.data.code === 2001) {
+      axios.CancelToken.source().cancel();
+      $store.commit("logout", "1");
+      return response.data;
     }
+    if (response.data.code && response.data.code !== 0) {
+      Message.error(response.data.msg);
+    }
+
+    console.log(response.data);
     return response.data;
   },
   (error) => {
+    // console.log(error);
     // https://www.runoob.com/tags/html-httpmessages.html
     // https://www.runoob.com/http/http-status-codes.html
-    const item = httpCodes.find(item => {
-      return error.response.status === item.code;
-    })
-    Message.error(`${item.code}：${item.message}`);
+    try {
+      const item = httpCodes.find(item => {
+        return error.response.status === item.code;
+      })
+      Message.error(`${item.code}：${item.message}`);
+    } catch (err) { }
     return Promise.reject(error)
   }
 );
@@ -58,4 +72,4 @@ axios.interceptors.response.use(
 
 
 
-export default axios;
+export { axios, axiosPromise };

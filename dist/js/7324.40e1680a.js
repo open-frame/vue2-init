@@ -1,0 +1,1 @@
+"use strict";(self["webpackChunkiov_platform"]=self["webpackChunkiov_platform"]||[]).push([[7324],{27324:function(n,r,t){t.r(r),t.d(r,{default:function(){return c}});var e=function(){var n=this,r=n._self._c;return r("el-card",{},[n._v(" 123 ")])},u=[],a={name:"my-info",data(){return{}}},f=a,l=t(1001),o=(0,l.Z)(f,e,u,!1,null,"4fa38036",null),c=o.exports}}]);

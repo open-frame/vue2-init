@@ -1,0 +1,1 @@
+"use strict";(self["webpackChunkiov_platform"]=self["webpackChunkiov_platform"]||[]).push([[739],{20739:function(t,n,r){r.r(n),r.d(n,{default:function(){return f}});var u=function(){var t=this,n=t._self._c;return n("div",{staticClass:"p-4"},[t._v(" 不活跃用户 ")])},a=[],e={name:"",data(){return{}}},l=e,s=r(1001),c=(0,s.Z)(l,u,a,!1,null,"4d38dcb1",null),f=c.exports}}]);

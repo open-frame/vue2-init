@@ -1,25 +1,25 @@
 <template>
   <el-card class="menus">
-    <el-row :gutter="40" class="filters">
+    <data-filter :loading="tableLoading" :btnSpan="12" :getData="getData" :queryReset="queryReset">
       <el-col :span="4">
-        <el-input clearable size="medium" v-model="queryForm.menuName" placeholder="资源名称" @change="pageReset"
-          @keyup.enter.native="getData"></el-input>
+        <clw-input clearable size="medium" v-model="queryForm.menuName" placeholder="资源名称" @change="pageReset"
+          @keyup.enter.native="getData"></clw-input>
       </el-col>
       <el-col :span="4">
-        <el-select filterable default-first-option clearable size="medium" v-model="queryForm.visible" placeholder="资源状态"
+        <clw-input clearable size="medium" v-model="queryForm.url" placeholder="页面路径" @change="pageReset"
+          @keyup.enter.native="getData"></clw-input>
+      </el-col>
+      <el-col :span="4">
+        <clw-select filterable default-first-option clearable size="medium" v-model="queryForm.visible" placeholder="资源状态"
           @change="pageReset">
           <el-option v-for="item in dropdowns.visible" :key="item.code_value" :label="item.code_name"
             :value="item.code_value"></el-option>
-        </el-select>
+        </clw-select>
       </el-col>
-      <el-col :span="16" class="text-end">
-        <el-button @click="getData" type="primary">搜索</el-button>
-        <el-button @click="queryReset">重置</el-button>
-      </el-col>
-    </el-row>
+    </data-filter>
     <el-divider />
-    <eida-table :loading="loading" :data="tableData" height="550" row-key="menuId" :page-size="queryForm.pageSize"
-      :current-page="queryForm.pageNum">
+    <custom-table ref="table" :loading="tableLoading" :data="tableData" height="550" row-key="menuId"
+      :page-size="queryForm.pageSize" :current-page="queryForm.pageNum">
       <template v-slot:left>
         <el-button v-permission="'function_edit'" size="small" icon="el-icon-plus"
           @click="editingMenu('add')">新增</el-button>
@@ -28,20 +28,20 @@
         表头上右侧容器
     </template> -->
       <template v-slot:columns>
-        <el-table-column prop="menuName" label="资源名称" width="180" :show-overflow-tooltip="true">
+        <el-table-column show-overflow-tooltip prop="menuName" label="资源名称" width="120">
         </el-table-column>
         <el-table-column show-overflow-tooltip prop="menuId" label="id">
         </el-table-column>
-        <el-table-column show-overflow-tooltip prop="orderNum" label="显示排序">
+        <el-table-column show-overflow-tooltip prop="parentId" label="父id">
         </el-table-column>
-        <el-table-column show-overflow-tooltip label="资源类型" width="90">
+        <el-table-column show-overflow-tooltip prop="menuType" label="资源类型" width="90">
           <template slot-scope="scope">
-            {{ scope.row.menuType | CodeTransforText(dropdowns.menuType, { name: "code_name", value: "code_value" }) }}
+            {{ scope.row.menuType | transfortext(dropdowns.menuType) }}
           </template>
         </el-table-column>
-        <el-table-column show-overflow-tooltip label="资源状态" width="90">
+        <el-table-column show-overflow-tooltip prop="visible" label="资源状态" width="90">
           <template slot-scope="scope">
-            {{ scope.row.visible | CodeTransforText(dropdowns.visible) }}
+            {{ scope.row.visible | transfortext(dropdowns.visible) }}
           </template>
         </el-table-column>
         <el-table-column show-overflow-tooltip prop="perms" label="权限标识">
@@ -50,19 +50,17 @@
         </el-table-column>
         <el-table-column show-overflow-tooltip prop="createTime" label="创建时间" width="180">
         </el-table-column>
-        <el-table-column show-overflow-tooltip label="操作" width="300" fixed="right">
+        <el-table-column label="操作" width="240" fixed="right">
           <template slot-scope="scope">
-            <el-button plain v-permission="'function_edit'" type="primary" size="mini"
+            <el-button v-permission="'function_edit'" type="primary" size="mini"
               @click="editingMenu('add', scope.row)">新增</el-button>
-            <el-button plain v-permission="'function_edit'" size="mini"
+            <el-button v-permission="'function_edit'" size="mini"
               @click="editingMenu('modification', scope.row)">编辑</el-button>
-            <el-button plain v-permission="'function_delete'" size="mini" type="danger"
-              @click="deletMenu(scope.row)">删除</el-button>
+            <el-button size="mini" type="danger" @click="deletMenu(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </template>
-    </eida-table>
-
+    </custom-table>
     <el-dialog :close-on-click-modal="false" :append-to-body="true" :modal-append-to-body="false"
       :title="dialogText + '资源'" :visible.sync="dialogVisible" :before-close="closeSeeDetail">
       <el-form :model="submitMenuForm" :rules="rules" ref="submitMenuForm" label-width="100px">
@@ -81,7 +79,7 @@
               :value="item.code_value"></el-option>
           </el-select>
         </el-form-item>
-        <template v-if="submitMenuForm.menuType != '3'">
+        <template v-if="submitMenuForm.menuType !== 'M'">
           <el-form-item label="文件地址" prop="remark">
             <el-select filterable clearable allow-create default-first-option v-model="submitMenuForm.remark"
               placeholder="">
@@ -99,11 +97,12 @@
           <el-input v-model="submitMenuForm.orderNum" clearable></el-input>
         </el-form-item>
         <el-form-item label="标志图标" prop="icon">
-          <el-select clearable filterable allow-create default-first-option v-model="submitMenuForm.icon" placeholder="">
-            <el-option v-for="(item, index) in icons" :key="index" :label="item.name" :value="item.name"
-              class="d-flex justify-content-between align-items-center">
-              <i :class="[item.name, 'fs-3']"></i>
-              <span class="text-black-50">{{ item.name }}</span>
+          <el-select clearable filterable allow-create default-first-option v-model="submitMenuForm.icon" placeholder=""
+            popper-class="icon-drop" :popper-append-to-body="false" @visible-change="getMenuIcon">
+            <span slot="prefix" :class="submitMenuForm.icon"></span>
+            <el-option v-for="(item, index) in dropdowns.icons" :key="index" :label="item" :value="item"
+              class="flex flex-justify-center flex-items-center">
+              <i :class="[item, 'text-xl']"></i>
             </el-option>
           </el-select>
         </el-form-item>
@@ -115,7 +114,7 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <span slot="footer">
         <el-button @click="closeSeeDetail">取 消</el-button>
         <el-button type="primary" @click="submitForm('submitMenuForm')">确 定</el-button>
       </span>
@@ -126,30 +125,33 @@
 <script>
 /**
  * @author        全易
- * @time          2023-10-05 16:36:03  星期一
+ * @time          2020-10-05 16:36:03  星期一
  * @description   资源管理
  */
-import api from "@/service/api/management";
+import { menuResource, addMenu, editMenu, deleteMenu } from "../api.js";
 import { dropdownsAPI } from "@/service/public.js";
-import icons from "@/assets/json/icons.json";
-import { permission } from '@/directives/index.js'
-import { CodeTransforText } from 'code-transfor-text_vue'
-import { queryReset, pageReset } from "@/mixins/index.js"
+import icons from "@/assets/icons/fa.json";
+import { transfortext } from "@/filters/index.js";
+import { permission } from "@/directives/index.js";
+import { queryReset, pageReset, parseParmas } from "@/mixins/index.js";
 
+
+let iconPageNum = 100;
 export default {
   name: "system-resource-index",
-  mixins: [queryReset, pageReset],
+  mixins: [queryReset, pageReset, parseParmas],
+  filters: {
+    transfortext,
+  },
   directives: {
     permission
   },
-  filters: {
-    CodeTransforText
-  },
   data() {
     return {
-      loading: false,
+      tableLoading: false,
       tableData: [],
       queryForm: {
+        url: "",
         menuName: "",
         visible: "",
         pageSize: this.$tableDataSize,
@@ -157,16 +159,12 @@ export default {
       },
       dialogVisible: false,
       dialogText: "",
-      icons: icons,
-      treeProps: {
-        children: "children",
-        label: "label",
-      },
       editMenuTreeData: [],
       dropdowns: {
-        menuType: menuTypeDemo,
+        icons: icons.slice(0, iconPageNum),
+        menuType: [],
         visible: [],
-        remark: []
+        remark: [],
       },
       submitMenuForm: {
         parentId: "",
@@ -179,31 +177,27 @@ export default {
         visible: "",
         remark: "",
       },
-      rules
+      rules,
     };
   },
   created() {
-    this.getData();
-    // this.getDropdowns();
+    this.getDropdowns();
   },
   watch: {
     // 监听资源类型选择
     "submitMenuForm.menuType"(now) {
       console.log(now);
-      this.rules.orderNum[0].required = !["5", "1"].includes(now);
-      this.rules.icon[0].required = ["3", "4"].includes(now);
-
-      if (now === "3") {
-        this.submitMenuForm.url = "";
-        this.submitMenuForm.remark = "";
-      }
+      this.rules.remark[0].required = !["F", "M"].includes(now);
+      this.rules.url[0].required = !["F", "M"].includes(now);
+      this.rules.orderNum[0].required = !["F", "1"].includes(now);
+      this.rules.icon[0].required = ["M", "C"].includes(now);
     },
     // 监听文件地址选择
     "submitMenuForm.remark"(now) {
       console.log(now);
-      this.submitMenuForm.url = now ? "/" + now.replace("/index", "") : "";
+      // this.submitMenuForm.url = now ? "/" + now.replace("/index", "") : "";
       this.submitMenuForm.perms = now ? now.replace(/\//g, "-") : "";
-    }
+    },
   },
   methods: {
     getDropdowns() {
@@ -221,30 +215,52 @@ export default {
       });
     },
     getData() {
-      this.loading = true;
+      this.tableLoading = true;
       this.tableData = [];
-      api.menuResource(this.queryForm).then((res) => {
+      menuResource(this.queryForm).then((res) => {
         if (res.code === 0) {
-          this.loading = false;
-          this.tableData = res.data.menuList;
+          this.tableLoading = false;
+          this.tableData = res.data;
 
           this.editMenuTreeData = [];
-          // this.flattening(res.data);
+          this.flattening(res.data);
         }
-      });
+      }).catch(() => {
+        this.tableLoading = false;
+      })
     },
     getPagesFile() {
       this.dropdowns.remark = [];
-      const files = require.context('@/pages/', true, /.vue$/).keys();
+      const files = require.context("@/pages/", true, /.vue$/).keys();
       // console.log(files)
-      files.filter(item => {
+      files.filter((item) => {
         const path = item.replace("./", "").replace(".vue", "");
-        // @/pages/components ｜ modules ｜panel目录都不算页面
-        if (!path.includes("components") && !path.includes("modules") && !path.includes("panel")) {
-          this.dropdowns.remark.push(path)
+        if (
+          !path.includes("components") &&
+          !path.includes("modules") &&
+          !path.includes("panel")
+        ) {
+          this.dropdowns.remark.push(path);
         }
-      })
+      });
       // console.log(this.dropdowns.remark)
+    },
+    // 异步获取图标
+    async getMenuIcon() {
+      if (this.dropdowns.icons.length >= icons.length) {
+        return;
+      }
+
+      const page = Math.ceil(icons.length / iconPageNum);
+      for (let i = 2; i <= page; i++) {
+        const data = await new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(icons.slice((i - 1) * iconPageNum, i * iconPageNum))
+          }, 888)
+        })
+        this.dropdowns.icons.push(...data);
+      }
+      // console.log(this.dropdowns.icons, icons);
     },
     // 打开添加/修改 资源面板
     editingMenu(status, data) {
@@ -283,7 +299,7 @@ export default {
       }
     },
     // 关闭查看数据详情
-    closeSeeDetail() {
+    closeSeeDetail(done) {
       this.dialogVisible = false;
       this.$refs["submitMenuForm"].resetFields();
       this.submitMenuForm.parentName = "";
@@ -293,6 +309,9 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          const api = {
+            addMenu, editMenu
+          }
           api[this.dialogText === "新增" ? "addMenu" : "editMenu"](
             this.submitMenuForm
           ).then((res) => {
@@ -319,14 +338,15 @@ export default {
       console.log(row);
       this.$confirm(`【${row.menuName}】删除后不可恢复，确认删除？`)
         .then(() => {
-          api
-            .deleteMenu({
-              menuId: row.menuId,
-            })
+
+          deleteMenu({
+            menuId: row.menuId,
+          })
             .then((res) => {
               if (res.code === 0) {
                 this.$message.success("删除成功");
                 this.getData();
+                this.$store.commit("routers");
               }
             });
         })
@@ -356,7 +376,7 @@ const rules = {
     },
   ],
   perms: [
-    { required: true, message: "请输入权限标识", trigger: "blur" },
+    { required: true, message: "请输入权限标识", trigger: "change" },
     {
       pattern: /^[A-Za-z0-9-_/]+$/,
       message: "只能为数字、字母、下划线、右斜线",
@@ -373,60 +393,36 @@ const rules = {
     { required: true, message: "请输入排序顺序", trigger: "blur" },
     { min: 1, max: 5, message: "长度在 1 到 5 个字符", trigger: "blur" },
   ],
-  menuType: [
-    { required: true, message: "请选择资源类型", trigger: "change" },
-  ],
-  visible: [
-    { required: true, message: "请选择资源状态", trigger: "change" },
-  ],
+  menuType: [{ required: true, message: "请选择资源类型", trigger: "change" }],
+  visible: [{ required: true, message: "请选择资源状态", trigger: "change" }],
   url: [
     { required: true, message: "请输入页面请求地址", trigger: "change" },
     {
-      pattern: /^[^<|>|(|)|+|*|%|=|{|}]*$/,
-      message: "禁止< > ( ) + * % = { }等特殊字符",
+      pattern: /^[^<|>|(|)|+|%|=|{|}]*$/,
+      message: "禁止< > ( ) + % = { }等特殊字符",
       trigger: "blur",
     },
     {
-      min: 3,
+      min: 1,
       max: 128,
-      message: "长度在 3 到 128 个字符",
+      message: "长度在 1 到 128 个字符",
       trigger: "blur",
     },
   ],
-  icon: [
-    { required: true, message: "请选择形象图标", trigger: "change" },
-  ],
+  icon: [{ required: true, message: "请选择形象图标", trigger: "change" }],
   remark: [
     { required: true, message: "请选择资源文件的地址", trigger: "change" },
   ],
-}
-
-const menuTypeDemo = [
-  {
-    "code_value": "0",
-    "code_name": "全屏" // 表示没有菜单栏和顶部条，将业务页面整个显示在浏览器里
-  },
- {
-    "code_value": "1",
-    "code_name": "全局" // 表示不在菜单栏显示，但会在项目整个任意地方可以点进去，比如个人中心、我的资料
-  },
-  {
-    "code_value": "2",
-    "code_name": "外链"
-  },
- {
-    "code_value": "3",
-    "code_name": "目录"
-  },
-  {
-    "code_value": "4",
-    "code_name": "菜单"
-  },
-  {
-    "code_value": "5",
-    "code_name": "按钮" // 表示页面需要显示的摁钮、模块之类的控制
-  }
-]
+};
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+::v-deep .icon-drop {
+  .el-scrollbar__view.el-select-dropdown__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 80px);
+    grid-gap: 5px;
+    justify-content: center;
+  }
+}
+</style>

@@ -8,7 +8,7 @@
       "remark": "管理员",
       "userId": 1,
       "deptCode": "3",
-      "deptName": "伊莎能源-车联网",
+      "deptName": "全易 · vue2开发模板",
       "loginName": "admin",
       "userName": "管理员",
       "email": "11@163.com",
@@ -24,7 +24,7 @@
       "userType": "00",
       "dept": {
         "deptCode": "3",
-        "deptName": "伊莎能源-车联网"
+        "deptName": "全易 · vue2开发模板"
       },
       "admin": true
     },
@@ -60,7 +60,7 @@
       "deleted": 0,
       "userId": 3,
       "deptCode": "3",
-      "deptName": "伊莎能源-车联网",
+      "deptName": "全易 · vue2开发模板",
       "loginName": "caiwu",
       "userName": "王红",
       "email": "1336@163.com",
@@ -76,7 +76,7 @@
       "userType": "00",
       "dept": {
         "deptCode": "3",
-        "deptName": "伊莎能源-车联网"
+        "deptName": "全易 · vue2开发模板"
       },
       "admin": false
     },
@@ -86,13 +86,13 @@
       "deleted": 0,
       "userId": 4,
       "deptCode": "3",
-      "deptName": "伊莎能源-车联网",
+      "deptName": "全易 · vue2开发模板",
       "loginName": "jf123",
       "userName": "贾峰",
       "email": "yfx@qq.com",
       "phonenumber": "133333333333",
       "sex": "0",
-      "avatar": "伊莎运营管理助手小程序",
+      "avatar": "助手小程序",
       "password": "$23$10$1Fxm3E4u8ourqyoF9o0mRBFVuY8IBaf8h702",
       "salt": "gxP|SPv4",
       "status": "1",
@@ -102,7 +102,7 @@
       "userType": "00",
       "dept": {
         "deptCode": "3",
-        "deptName": "伊莎能源-车联网"
+        "deptName": "全易 · vue2开发模板"
       },
       "admin": false
     }

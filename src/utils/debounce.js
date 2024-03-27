@@ -1,10 +1,10 @@
 import Vue from 'vue';
-
+const on = Vue.prototype.$on;
+// https://quanyi.blog.csdn.net/article/details/124670043
 
 
 
 // 防抖处理 - 先执行
-const on = Vue.prototype.$on;
 Vue.prototype.$on = function (event, fn) {
   // console.log(event,fn);
   let newFN = fn;
@@ -28,7 +28,6 @@ Vue.prototype.$on = function (event, fn) {
 
 
 /* // 防抖处理 - 后执行
-const on = Vue.prototype.$on;
 Vue.prototype.$on = function (event, fn) {
   let timer
   let newFN = fn

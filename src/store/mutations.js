@@ -1,17 +1,8 @@
 import $router from "../router/index"
 const noAppendTabs = require("@/config/no-append-tabs.json") // 不插入到标签条的页面
+const publicPath = require("@/config/public-path.json");
 
 export default {
-  // 设置当前网络状态
-  setIsOnline(state, net) {
-    console.log(net);
-    state.onLine = net;
-  },
-  // 设置当前网络状况
-  setNetNow(state, net) {
-    console.log(net);
-    state.nowNet = net;
-  },
   // 存储用户信息
   setUserInfo(state, data) {
     state.userInfo = data;
@@ -22,12 +13,33 @@ export default {
     state.layout = code;
   },
 
+  // 改变页面全覆盖还是左右结构型的页面
+  changeFullPage(state, status) {
+    state.fullPage = status;
+  },
+
   // 设置菜单栏显示数据
   setMenu(state, data) {
     // console.log("路由数据：", data);
+    // 3/1. 扁平化路由数据封装
+    let flatRoute = [];
+    (function flattening(menu) {
+      menu.map((item) => {
+        // console.log(item);
+        if (item.children) {
+          flattening(item.children); // 递归执行
+        }
+        flatRoute.push({
+          ...item,
+          icon: item.icon.replace('fa fa-', 'i-fa:'),
+        });
+      });
+    })(data);
+    // console.log("扁平化路由：", flatRoute);
+
     // 过滤不该显示在菜单栏的数据
-    let filterRoute = data.filter(item => {
-      return !["5", "1"].includes(item.menuType) // 排除掉摁钮和全局菜单
+    let filterRoute = flatRoute.filter(item => {
+      return !["F", "1"].includes(item.menuType) // 排除掉摁钮和全局菜单
     })
     // console.log("过滤后的路由：", filterRoute);
 
@@ -49,8 +61,21 @@ export default {
   // 处理权限路由数据
   setRouters(state, data) {
     // console.log("路由信息：", data);
-    // 只保留有url的路由
-    const retainURL = data.filter((item) => {
+    // 3/1. 扁平化路由数据封装
+    let flatRoute = [];
+    (function flattening(menu) {
+      menu.map((item) => {
+        // console.log(item);
+        if (item.children) {
+          flattening(item.children); // 递归执行
+        }
+        flatRoute.push(item);
+      });
+    })(data);
+    // console.log("扁平化路由：", flatRoute);
+
+    // 过滤平台的路由
+    const retainURL = flatRoute.filter((item) => {
       // console.log(item);
       if (item.url !== "") {
         return item
@@ -59,34 +84,31 @@ export default {
     // console.log("路由数据：", retainURL);
 
     // 存储路由
-    state.permissionRouters = require("@/config/public-path.json"); // 开放路径
+    state.permissionRouters = [...publicPath]; // 开放路径
     state.permissionRouters.push(...retainURL.map(item => {
       return item.url;
     }));
 
     // 路由结构化
     const structuringRoute = retainURL.map(item => {
-      let component;
-      try {
-        component = () => import(`@/pages/${item.remark}.vue`)
-      } catch (err) {
-        component = () => import(`@/pages/404.vue`)
-      }
       return {
         path: item.url,
         name: item.remark.replace(/\//g, "-"),
-        component,
+        component() {
+          let component;
+          try {
+            component = import(`@/pages/${item.remark}.vue`);
+          } catch (err) {
+            component = import('@/pages/error/building.vue');
+          }
+          return component;
+        },
         meta: {
           ...item,
-          title: item.menuName,
-          id: item.menuIdStr,
+          icon: item.icon.replace('fa fa-', 'i-fa:'),
           permissions: item.children.map(it => {
-            if (it.menuType === "5") {
-              return {
-                ...it,
-                title: it.menuName,
-                id: it.menuIdStr,
-              }
+            if (it.menuType === "F") {
+              return it
             }
           })
         }
@@ -99,7 +121,6 @@ export default {
       path: '/',
       name: 'main-file',
       component: () => import("@/pages/main.vue"),
-      redirect: "/home",
       children: structuringRoute
     });
   },
@@ -128,16 +149,24 @@ export default {
     state.isCollapse = status;
   },
 
+  // 设置全局查看的商户/机构
+  setNowDept(state, code) {
+    state.nowDept = code;
+  },
+
+  openLoginDialog(state, status) {
+    state.loginDialog = status;
+  },
+
   // 重置用户登陆的所有相关存储
   logout(state, type = "0") {
+    // if (localStorage.getItem("token")) {
+    //   this.commit("openLoginDialog", true);
+    // } else {
+    $router.replace("/logon");
     sessionStorage.clear();
     localStorage.clear();
-    $router.replace({
-      path: "/logon",
-      query: {
-        previous: `${type === "0" ? "" : location.pathname + location.search}`
-      }
-    });
+    // }
   },
 
   // 显示/隐藏 页面访问记录
@@ -147,15 +176,12 @@ export default {
 
   // 插入经常访问的路由
   setOpenedPages(state, data) {
-    // console.log(state.openedPages, data, noAppendTabs.includes(data.path));
-    // 排除没有url的页面、不需要插入页签的路由
-    if (!data.path || noAppendTabs.includes(data.path)) {
-      return;
-    }
-    // 排除已有页签
-    if (state.openedPages.some(item => {
+    const exist = state.openedPages.some(item => {
       return item.path === data.path;
-    })) {
+    });
+
+    // 排除存在的页签、没有url的页面、全屏的页面、不需要插入页签的路由
+    if (exist || !data.name || !data.path || ["0", "2"].includes(data.meta.menuType) || noAppendTabs.includes(data.path)) {
       return;
     }
 
@@ -163,22 +189,22 @@ export default {
   },
 
   // 设置当前停留页
-  setDefaultPage(state, id) {
-    state.nowPage = id;
+  setDefaultPage(state, menuIdStr) {
+    state.nowPage = menuIdStr;
   },
 
   // 页签的关闭事件
-  closeThisOpenedPages(state, id) {
+  closeThisOpenedPages(state, menuIdStr) {
     const tabs = state.openedPages;
     const current = $router.history.current;
     tabs.forEach((tab, index) => {
-      if (tab.meta.id === id) {
+      if (tab.meta.menuIdStr === menuIdStr) {
         // 删除tab页
         state.openedPages.splice(index, 1);
 
         // 如果删除的是当前页
         const left = tabs[tabs.length - 1].path;
-        if (current.meta.id === tab.meta.id) {
+        if (current.meta.menuIdStr === tab.meta.menuIdStr) {
           $router.push(left); // 跳转左侧页
         }
         return;
@@ -191,16 +217,15 @@ export default {
     state.openedPages = [state.openedPages[0]];
     switch (type) {
       case "0":
-        if (current.path !== "/home") {
-          $router.replace("/home");
+        if (current.path !== "/") {
+          $router.replace("/");
         }
         break;
       case "1":
-        if (current.path !== "/home") {
+        if (current.path !== "/") {
           state.openedPages = [
             state.openedPages[0],
             {
-              title: current.meta.title,
               path: current.path,
               meta: current.meta
             }];

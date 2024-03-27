@@ -1,33 +1,28 @@
 <template>
   <el-card class="role">
-    <el-row :gutter="40">
+    <data-filter :loading="loading" :btnSpan="12" :getData="getData" :queryReset="queryReset">
       <el-col :span="4">
-        <el-input clearable size="medium" v-model="queryForm.roleName" placeholder="角色名称" @change="pageReset"
-          @keyup.enter.native="getData"></el-input>
+        <clw-input clearable size="medium" v-model="queryForm.roleName" placeholder="角色名称" @change="pageReset"
+          @keyup.enter.native="getData"></clw-input>
       </el-col>
       <el-col :span="4">
-        <el-input clearable size="medium" v-model="queryForm.roleKey" placeholder="权限字符" @change="pageReset"
-          @keyup.enter.native="getData"></el-input>
+        <clw-input clearable size="medium" v-model="queryForm.roleKey" placeholder="权限字符" @change="pageReset"
+          @keyup.enter.native="getData"></clw-input>
       </el-col>
       <el-col :span="4">
-        <el-select clearable size="medium" v-model="queryForm.status" placeholder="角色状态" @change="pageReset">
+        <clw-select clearable size="medium" v-model="queryForm.status" placeholder="角色状态" @change="pageReset">
           <el-option v-for="(item, index) in dropdowns.status" :key="index" :label="item.code_name"
             :value="item.code_value"></el-option>
-        </el-select>
+        </clw-select>
       </el-col>
-      <el-col :span="12" class="text-end">
-        <el-button @click="getData" type="primary">搜索</el-button>
-        <el-button @click="queryReset">重置</el-button>
-      </el-col>
-    </el-row>
+    </data-filter>
     <el-divider />
-    <eida-table :loading="loading" :total="total" :data="tableData" height="550" row-key="roleId"
+    <custom-table :loading="loading" :total="total" :data="tableData" height="550" row-key="roleId" ref="table"
       :page-size="queryForm.pageSize" :current-page="queryForm.pageNum" @selection-change="selectedDate"
-      @size-change="dataSizeChange" @current-change="handleCurrentChange" @exporting="exporting" @printing="printing">
+      @size-change="dataSizeChange" @current-change="handleCurrentChange" :derive="exporting">
       <template v-slot:left>
         <el-button v-permission="'function_edit'" size="small" icon="el-icon-plus" @click="editing('add')">新增</el-button>
-        <el-button v-permission="'function_delete'" size="small" icon="el-icon-delete"
-          @click="deleteing('more')">删除</el-button>
+        <el-button size="small" icon="el-icon-delete" @click="deleteing('more')">删除</el-button>
       </template>
       <!-- <template v-slot:right>
         表头上右侧容器
@@ -35,29 +30,24 @@
       <template v-slot:columns>
         <el-table-column show-overflow-tooltip label="角色id" prop="roleId"></el-table-column>
         <el-table-column show-overflow-tooltip label="角色名称" prop="roleName"></el-table-column>
-        <el-table-column show-overflow-tooltip label="权限字符" prop="roleKey">
-          <span slot-scope="scope" v-copy>
-            {{ scope.row.roleKey }}
-          </span>
-        </el-table-column>
-        <el-table-column show-overflow-tooltip label="角色状态">
+        <el-table-column show-overflow-tooltip label="权限字符" prop="roleKey"></el-table-column>
+        <el-table-column show-overflow-tooltip label="角色状态" prop="status">
           <template slot-scope="scope">
-            {{ scope.row.status | CodeTransforText(dropdowns.status, { name: "code_name", value: "code_value" }) }}
+            {{ scope.row.status | transfortext(dropdowns.status) }}
           </template>
         </el-table-column>
         <el-table-column show-overflow-tooltip label="操作时间" prop="createTime"></el-table-column>
-        <el-table-column show-overflow-tooltip label="操作" width="240" fixed="right">
+        <el-table-column label="操作" width="160" fixed="right">
           <template slot-scope="scope">
-            <el-button plain v-permission="'function_edit'" @click="editing('modification', scope.row)" type="primary"
-              size="small">编辑</el-button>
-            <el-button plain v-permission="'function_delete'" type="danger" size="small"
-              @click="deleteing('one', scope.row)">删除</el-button>
+            <el-button v-permission="'function_edit'" @click="editing('modification', scope.row)" type="primary"
+              size="mini">编辑</el-button>
+            <el-button type="danger" size="mini" @click="deleteing('one', scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </template>
-    </eida-table>
-    <el-dialog :close-on-click-modal="false" :append-to-body="true" :modal-append-to-body="false"
-      :title="dialogText + '角色'" :visible="dialogVisible" :before-close="closeSeeDetail">
+    </custom-table>
+    <el-dialog :close-on-click-modal="false" :modal-append-to-body="false" :title="dialogText + '角色'"
+      :visible="dialogVisible" :before-close="closeSeeDetail">
       <el-form :model="roleForm" :rules="rules" ref="roleForm" label-width="100px">
         <el-form-item label="角色名称：" prop="roleName">
           <el-input clearable v-model="roleForm.roleName"></el-input>
@@ -79,11 +69,12 @@
           </el-input>
           <el-tree ref="menuTree" show-checkbox :check-strictly="true" node-key="menuId"
             :default-checked-keys="roleForm.menuIds" highlight-current :data="jurisdictionTreeData"
-            :props="{ label: 'menuName' }" @check="checkMenu" :filter-node-method="filterMenu">
+            :props="{ label: 'menuName' }" @check="checkMenu" :filter-node-method="filterMenu"
+            style="height: 330px; overflow-y: auto;">
           </el-tree>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <span slot="footer">
         <el-button type="primary" @click="submitForm('roleForm')">确 定</el-button>
         <el-button @click="closeSeeDetail('roleForm')">取 消</el-button>
       </span>
@@ -94,26 +85,34 @@
 <script>
 /**
  * @author        全易
- * @time          2023-10-05 16:36:26  星期一
+ * @time          2020-10-05 16:36:26  星期一
  * @description   角色管理
  */
-import api from "@/service/api/management";
+import {
+  roleDetail,
+  menuResource,
+  roleList,
+  addRole,
+  editRole,
+  deleteRole,
+} from "../api.js";
 import { dropdownsAPI } from "@/service/public.js";
-import { exportExcel } from "@/utils/export-file";
-import { permission, copy } from '@/directives/index.js'
-import { CodeTransforText } from 'code-transfor-text_vue'
-import { queryReset, pageReset, pagination } from "@/mixins/index.js"
+
+import { transfortext } from "@/filters/index.js";
+import { permission } from "@/directives/index.js";
+import { queryReset, pageReset, pagination, parseParmas } from "@/mixins/index.js";
 
 export default {
   name: "system-role-index",
-  mixins: [queryReset, pageReset, pagination],
-  directives: {
-    permission, copy
-  },
+  mixins: [queryReset, pageReset, pagination, parseParmas],
   filters: {
-    CodeTransforText
+    transfortext,
+  },
+  directives: {
+    permission
   },
   data() {
+    this.rules = rules;
     return {
       loading: false,
       queryForm: {
@@ -128,14 +127,7 @@ export default {
         isAsc: "asc",
       },
       dropdowns: {
-        status: [{
-          code_name: "启用",
-          code_value: "1"
-        },
-        {
-          code_name: "禁用",
-          code_value: "0"
-        }],
+        status: [],
       },
       time: "",
       tableData: [],
@@ -152,28 +144,15 @@ export default {
         menuIds: [],
       },
       jurisdictionTreeData: [],
-      rules,
     };
   },
   created() {
-    this.getData();
-    // this.getDropdowns();
+    this.getDropdowns();
   },
   watch: {
     filterMenuTree(val) {
       this.$refs.menuTree.filter(val);
     },
-    jurisdictionTreeData(now) {
-      // console.log(now);
-      if (now.length) {
-        // 首页必选
-        this.roleForm.menuIds = [
-          now.find((item) => {
-            return item.perms === "home/index";
-          }).menuId,
-        ];
-      }
-    }
   },
   methods: {
     getDropdowns() {
@@ -182,7 +161,6 @@ export default {
         if (res.code === 0) {
           this.dropdowns.status = res.data;
         }
-
       });
     },
     // 选择数据
@@ -191,9 +169,38 @@ export default {
       this.moreSelect = val;
     },
     // 打开添加、修改角色模态框
-    editing(status, data) {
+    async editing(status, data) {
       console.log(status, data);
-      this.getMenuResource();
+      const loading = this.$loading({
+        lock: true,
+        text: '正在查询',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
+
+      const menuTree = await menuResource({});// 获取菜单树
+      loading.close();
+
+      if (menuTree.code === 0) {
+        console.log("菜单树：", menuTree);
+        // 首页必选
+        this.roleForm.menuIds = [
+          menuTree.data.find((item) => {
+            return item.perms === "home/index";
+          }).menuId,
+        ];
+        // 首页禁止操作
+        this.jurisdictionTreeData = menuTree.data.map((item) => {
+          return {
+            ...item,
+            disabled: item.perms === "home/index",
+          };
+        });
+      }
+
+
+
+
       this.dialogVisible = true;
       const that = this;
 
@@ -203,8 +210,7 @@ export default {
       } else {
         this.dialogText = "修改";
         this.$nextTick(() => {
-          api.roleDetail(data.roleId).then((res) => {
-
+          roleDetail(data.roleId).then((res) => {
             if (res.code === 0) {
               that.roleForm.roleId = res.data.roleId;
               that.roleForm.roleName = res.data.roleName;
@@ -216,20 +222,6 @@ export default {
           });
         });
       }
-    },
-    // 获取菜单树
-    getMenuResource() {
-      api.menuResource({}).then((res) => {
-        if (res.code === 0) {
-          console.log("菜单树：", res);
-          this.jurisdictionTreeData = res.data.menuList.map((item) => {
-            return {
-              ...item,
-              disabled: item.perms === "home/index",
-            };
-          });
-        }
-      });
     },
     // 过滤资源
     filterMenu(value, data) {
@@ -244,15 +236,16 @@ export default {
     // 表格数据
     getData() {
       this.loading = true;
-
-      api.roleList(this.queryForm).then((res) => {
-
+      this.tableData = [];
+      roleList(this.queryForm).then((res) => {
         this.loading = false;
         if (res.code === 0) {
           this.total = res.total;
           this.tableData = res.rows;
         }
-      });
+      }).catch(() => {
+        this.loading = false;
+      })
     },
     //
     checkMenu(data, node) {
@@ -263,10 +256,13 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log(this.roleForm);
+          const api = {
+            addRole,
+            editRole,
+          };
           api[this.dialogText === "添加" ? "addRole" : "editRole"](
             this.roleForm
           ).then((res) => {
-
             if (res.code === 0) {
               if (this.dialogText === "添加") {
                 this.$message.success("添加成功");
@@ -305,86 +301,38 @@ export default {
             }
           }
           console.log(ids);
-          api
-            .deleteRole({
-              ids: ids,
-            })
-            .then((res) => {
-              if (res.code === 0) {
-                this.$message.success(res.msg);
-                this.getData();
-                this.moreSelect = [];
-              }
-            });
+
+          deleteRole({
+            ids: ids,
+          }).then((res) => {
+            if (res.code === 0) {
+              this.$message.success(res.msg);
+              this.getData();
+              this.moreSelect = [];
+            }
+          });
         })
-        .catch((err) => { });
+        .catch(() => { });
     },
     // 导出列表
-    exporting(command) {
-      console.log(command);
-      if (this.tableData.length < 1) {
-        this.$message.warning("无数据可导");
-        return false;
-      }
-
-      const downLoading = this.$loading({
-        lock: true,
-        text: "正在获取数据...",
-        spinner: "el-icon-loading",
-        background: "rgba(0, 0, 0, 0.7)",
-      });
-
+    async exporting(command) {
       let params = { ...this.queryForm };
       if (command === "2") {
         params.pageSize = this.total;
         params.pageNum = 1;
       }
-
-      api.roleList(params).then((res) => {
-        if (res.code === 0) {
-          downLoading.text = "正在下载...";
-          const data = res.rows.map((item) => {
-            return {
-              角色id: item.roleId,
-              角色名称: item.roleName,
-              权限字符: item.roleKey,
-              角色状态: `${this.$options.filters.CodeTransforText(item.status, this.dropdowns.status)}`,
-            };
-          });
-          exportExcel(data, "运营用户列表");
-        }
-      }).finally(() => {
-        downLoading.close();
-      });
-    },
-    // 打印订单表
-    printing(command) {
-      // https://blog.csdn.net/he_wenzi/article/details/110645566
-      // https://www.jianshu.com/p/bc079fbb20c7
-
-      let params = { ...this.queryForm };
-      if (command === "2") {
-        params.pageSize = this.total;
-        params.pageNum = 1;
-      }
-      const tableColumn = [
-        { field: "roleId", displayName: "角色id" },
-        { field: "roleName", displayName: "角色名称" },
-        { field: "roleKey", displayName: "权限字符" },
-      ];
-      api.roleList(params).then((res) => {
-        printJS({
-          type: "json",
-          printable: res.rows,
-          scanStyles: true,
-          header: `<h2 style="text-align: center">运营用户列表</h2>`,
-          properties: tableColumn,
-          style: "@media print{@page {size:landscape}}",
-          gridHeaderStyle: "border: 1px solid #000;text-align:center",
-          gridStyle: "border: 1px solid #000;text-align:center",
+      const result = await roleList(params)
+      if (result.code === 0) {
+        const columns = this.$refs.table.getColumns();
+        const data = result.rows.map((item) => {
+          let column = columns.map(key => {
+            return [key.label, `${transfortext(item[key.prop], this.dropdowns[key.prop])}`]
+          })
+          return Object.fromEntries(column);
         });
-      });
-    }
+        return data;
+      }
+    },
   },
 };
 
