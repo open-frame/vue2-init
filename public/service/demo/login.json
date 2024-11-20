@@ -1,8 +1,0 @@
-{
-  "success": true,
-  "errorCode": 200,
-  "errorMsg": "success",
-  "data": {
-    "access_token": "666"
-  }
-}
